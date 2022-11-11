@@ -4,19 +4,19 @@
 public class ArrayStorage {
     Resume[] storage = new Resume[10000];
 
-    public static int elementCounter = 0;
+    public int countResumes = 0;
 
     void clear() {
-        for (int i = 0; i < elementCounter; i++) {
+        for (int i = 0; i < countResumes; i++) {
             storage[i] = null;
-            elementCounter = 0;
+            countResumes = 0;
         }
 
     }
 
     void save(Resume resume) {
-        storage[elementCounter] = resume;
-        elementCounter++;
+        storage[countResumes] = resume;
+        countResumes++;
     }
 
     Resume get(String uuid) {
@@ -36,7 +36,7 @@ public class ArrayStorage {
                 while (storage[i] != null && storage[i + 1] != null) {
                     storage[i] = storage[++i];
                 }
-                elementCounter--;
+                countResumes--;
                 return;
             }
         }
@@ -46,12 +46,12 @@ public class ArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
     Resume[] getAll() {
-        Resume[] all = new Resume[elementCounter];
-        System.arraycopy(storage, 0, all, 0, elementCounter);
+        Resume[] all = new Resume[countResumes];
+        System.arraycopy(storage, 0, all, 0, countResumes);
         return all;
     }
 
     int size() {
-        return elementCounter;
+        return countResumes;
     }
 }
