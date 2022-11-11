@@ -28,28 +28,27 @@ public class ArrayStorage {
         return storage[i];
     }
 
-        void delete (String uuid){
-            for (int i = 0; i < storage.length; i++) {
-                if (storage[i].toString().equals(uuid)) {
-                    while (storage[i] != null && storage[i + 1] != null) {
-                        storage[i] = storage[++i];
-                    }
-                    countResumes--;
-                    return;
+    void delete(String uuid) {
+        for (int i = 0; i < countResumes; i++) {
+            if (storage[i].toString().equals(uuid)) {
+                while (i < countResumes) {
+                    storage[i] = storage[++i];
                 }
             }
         }
-
-        /**
-         * @return array, contains only Resumes in storage (without null)
-         */
-        Resume[] getAll () {
-            Resume[] all = new Resume[countResumes];
-            System.arraycopy(storage, 0, all, 0, countResumes);
-            return all;
-        }
-
-        int size () {
-            return countResumes;
-        }
+        countResumes--;
     }
+
+    /**
+     * @return array, contains only Resumes in storage (without null)
+     */
+    Resume[] getAll() {
+        Resume[] all = new Resume[countResumes];
+        System.arraycopy(storage, 0, all, 0, countResumes);
+        return all;
+    }
+
+    int size() {
+        return countResumes;
+    }
+}
