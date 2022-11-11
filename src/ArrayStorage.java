@@ -36,9 +36,9 @@ public class ArrayStorage {
                     storage[i] = storage[++i];
                 }
                 storage[i] = null;
+                countResumes--;
             }
         }
-        countResumes--;
     }
 
     /**
