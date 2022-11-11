@@ -21,21 +21,21 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        int i;
-        for (i = 0; i < countResumes; i++) {
+        for (int i = 0; i < countResumes; i++) {
             if (storage[i].toString().equals(uuid)) {
-                break;
+                return storage[i];
             }
         }
-        return storage[i];
+        return null;
     }
 
     void delete(String uuid) {
         for (int i = 0; i < countResumes; i++) {
             if (storage[i].toString().equals(uuid)) {
-                while (i < countResumes) {
+                while (i < countResumes - 1) {
                     storage[i] = storage[++i];
                 }
+                storage[i] = null;
             }
         }
         countResumes--;
