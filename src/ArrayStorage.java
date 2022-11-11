@@ -19,38 +19,37 @@ public class ArrayStorage {
     }
 
     Resume get(String uuid) {
-        Resume target = null;
-        for (Resume resume : storage) {
-            if (resume.toString().equals(uuid)) {
-                target = resume;
+        int i;
+        for (i = 0; i < countResumes; i++) {
+            if (storage[i].toString().equals(uuid)) {
                 break;
             }
         }
-        return target;
+        return storage[i];
     }
 
-    void delete(String uuid) {
-        for (int i = 0; i < storage.length; i++) {
-            if (storage[i].toString().equals(uuid)) {
-                while (storage[i] != null && storage[i + 1] != null) {
-                    storage[i] = storage[++i];
+        void delete (String uuid){
+            for (int i = 0; i < storage.length; i++) {
+                if (storage[i].toString().equals(uuid)) {
+                    while (storage[i] != null && storage[i + 1] != null) {
+                        storage[i] = storage[++i];
+                    }
+                    countResumes--;
+                    return;
                 }
-                countResumes--;
-                return;
             }
         }
-    }
 
-    /**
-     * @return array, contains only Resumes in storage (without null)
-     */
-    Resume[] getAll() {
-        Resume[] all = new Resume[countResumes];
-        System.arraycopy(storage, 0, all, 0, countResumes);
-        return all;
-    }
+        /**
+         * @return array, contains only Resumes in storage (without null)
+         */
+        Resume[] getAll () {
+            Resume[] all = new Resume[countResumes];
+            System.arraycopy(storage, 0, all, 0, countResumes);
+            return all;
+        }
 
-    int size() {
-        return countResumes;
+        int size () {
+            return countResumes;
+        }
     }
-}
