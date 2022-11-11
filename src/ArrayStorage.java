@@ -9,9 +9,8 @@ public class ArrayStorage {
     void clear() {
         for (int i = 0; i < countResumes; i++) {
             storage[i] = null;
-            countResumes = 0;
         }
-
+        countResumes = 0;
     }
 
     void save(Resume resume) {
