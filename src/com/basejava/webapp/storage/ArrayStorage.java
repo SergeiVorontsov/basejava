@@ -25,8 +25,17 @@ public class ArrayStorage {
     }
 
     public void clear() {
-        Arrays.fill(storage, 0, countResumes - 1, null);
+        Arrays.fill(storage, 0, countResumes, null);
         countResumes = 0;
+    }
+
+    public void update(Resume resume) {
+        if (checkExist(resume.getUuid())) {
+            int indexOfResume = Arrays.asList(getAll()).indexOf(resume);
+            storage[indexOfResume] = resume;
+        } else {
+            System.err.println("ERROR Unable to update " + resume.getUuid() + ": " + NOT_EXIST);
+        }
     }
 
     public void save(Resume resume) {
