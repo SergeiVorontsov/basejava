@@ -9,6 +9,9 @@ import java.util.Arrays;
  */
 public class ArrayStorage {
     private final Resume[] storage = new Resume[10000];
+    private final String NOT_EXIST = "There is no such resume in database";
+    private final String IS_EXIST = "Resume already exist in database";
+    private final String OVERFLOW = "Resume database is full";
 
     private int countResumes = 0;
 
@@ -21,6 +24,7 @@ public class ArrayStorage {
         return false;
     }
 
+
     public void clear() {
         for (int i = 0; i < countResumes; i++) {
             storage[i] = null;
@@ -29,27 +33,41 @@ public class ArrayStorage {
     }
 
     public void save(Resume resume) {
-        storage[countResumes] = resume;
-        countResumes++;
+        if (checkExist(resume.getUuid())) {
+            System.err.println("ERROR Unable to save " + resume.getUuid() + ": " + IS_EXIST);
+        } else if (storage.length == countResumes) {
+            System.err.println("ERROR Unable to save " + resume.getUuid() + ": " + OVERFLOW);
+        } else {
+            storage[countResumes] = resume;
+            countResumes++;
+        }
     }
 
     public Resume get(String uuid) {
-        for (int i = 0; i < countResumes; i++) {
-            if (storage[i].toString().equals(uuid)) {
-                return storage[i];
+        if (!checkExist(uuid)) {
+            System.err.println("ERROR Unable to get " + uuid + ": " + NOT_EXIST);
+        } else {
+            for (int i = 0; i < countResumes; i++) {
+                if (storage[i].toString().equals(uuid)) {
+                    return storage[i];
+                }
             }
         }
         return null;
     }
 
     public void delete(String uuid) {
-        for (int i = 0; i < countResumes; i++) {
-            if (storage[i].toString().equals(uuid)) {
-                while (i < countResumes - 1) {
-                    storage[i] = storage[++i];
+        if (!checkExist(uuid)) {
+            System.err.println("ERROR Unable to delete " + uuid + ": " + NOT_EXIST);
+        } else {
+            for (int i = 0; i < countResumes; i++) {
+                if (storage[i].toString().equals(uuid)) {
+                    while (i < countResumes - 1) {
+                        storage[i] = storage[++i];
+                    }
+                    storage[i] = null;
+                    countResumes--;
                 }
-                storage[i] = null;
-                countResumes--;
             }
         }
     }
