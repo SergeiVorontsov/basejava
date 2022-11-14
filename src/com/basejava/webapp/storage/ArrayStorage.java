@@ -24,11 +24,8 @@ public class ArrayStorage {
         return false;
     }
 
-
     public void clear() {
-        for (int i = 0; i < countResumes; i++) {
-            storage[i] = null;
-        }
+        Arrays.fill(storage, 0, countResumes - 1, null);
         countResumes = 0;
     }
 
