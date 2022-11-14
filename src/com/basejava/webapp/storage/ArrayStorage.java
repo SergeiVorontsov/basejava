@@ -12,6 +12,15 @@ public class ArrayStorage {
 
     private int countResumes = 0;
 
+    private boolean checkExist(String uuid) {
+        for (int i = 0; i < countResumes; i++) {
+            if (storage[i].toString().equals(uuid)) {
+                return true;
+            }
+        }
+        return false;
+    }
+
     public void clear() {
         for (int i = 0; i < countResumes; i++) {
             storage[i] = null;
