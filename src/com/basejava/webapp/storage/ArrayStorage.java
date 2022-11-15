@@ -8,10 +8,9 @@ import java.util.Arrays;
  * Array based storage for Resumes
  */
 public class ArrayStorage {
-    private final Resume[] storage = new Resume[10000];
-    private final String NOT_EXIST = "There is no such resume in database";
-    private final String IS_EXIST = "Resume already exist in database";
-    private final String OVERFLOW = "Resume database is full";
+
+    protected static final int STORAGE_LIMIT = 10000;
+    private final Resume[] storage = new Resume[STORAGE_LIMIT];
 
     private int countResumes = 0;
 
@@ -34,15 +33,15 @@ public class ArrayStorage {
             int indexOfResume = Arrays.asList(getAll()).indexOf(resume);
             storage[indexOfResume] = resume;
         } else {
-            System.err.println("ERROR Unable to update " + resume.getUuid() + ": " + NOT_EXIST);
+            System.err.println("ERROR Unable to update " + resume.getUuid() + ": There is no such resume in database");
         }
     }
 
     public void save(Resume resume) {
         if (checkExist(resume.getUuid())) {
-            System.err.println("ERROR Unable to save " + resume.getUuid() + ": " + IS_EXIST);
+            System.err.println("ERROR Unable to save " + resume.getUuid() + ": Resume already exist in database");
         } else if (storage.length == countResumes) {
-            System.err.println("ERROR Unable to save " + resume.getUuid() + ": " + OVERFLOW);
+            System.err.println("ERROR Unable to save " + resume.getUuid() + ": Resume database is full");
         } else {
             storage[countResumes] = resume;
             countResumes++;
@@ -51,7 +50,7 @@ public class ArrayStorage {
 
     public Resume get(String uuid) {
         if (!checkExist(uuid)) {
-            System.err.println("ERROR Unable to get " + uuid + ": " + NOT_EXIST);
+            System.err.println("ERROR Unable to get " + uuid + ": There is no such resume in database");
         } else {
             for (int i = 0; i < countResumes; i++) {
                 if (storage[i].toString().equals(uuid)) {
@@ -64,7 +63,7 @@ public class ArrayStorage {
 
     public void delete(String uuid) {
         if (!checkExist(uuid)) {
-            System.err.println("ERROR Unable to delete " + uuid + ": " + NOT_EXIST);
+            System.err.println("ERROR Unable to delete " + uuid + ": There is no such resume in database");
         } else {
             for (int i = 0; i < countResumes; i++) {
                 if (storage[i].toString().equals(uuid)) {
