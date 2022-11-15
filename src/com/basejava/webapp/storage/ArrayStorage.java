@@ -39,7 +39,7 @@ public class ArrayStorage {
     public void save(Resume resume) {
         if (getIndex(resume.getUuid()) >= 0) {
             System.err.println("ERROR Unable to save " + resume.getUuid() + ": Resume already exist in database");
-        } else if (storage.length == countResumes) {
+        } else if (STORAGE_LIMIT == countResumes) {
             System.err.println("ERROR Unable to save " + resume.getUuid() + ": Resume database is full");
         } else {
             storage[countResumes] = resume;
