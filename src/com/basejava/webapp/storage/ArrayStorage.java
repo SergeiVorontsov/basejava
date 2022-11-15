@@ -14,13 +14,13 @@ public class ArrayStorage {
 
     private int countResumes = 0;
 
-    private boolean checkExist(String uuid) {
+    private int getIndex(String uuid) {
         for (int i = 0; i < countResumes; i++) {
             if (storage[i].toString().equals(uuid)) {
-                return true;
+                return i;
             }
         }
-        return false;
+        return -1;
     }
 
     public void clear() {
@@ -29,16 +29,15 @@ public class ArrayStorage {
     }
 
     public void update(Resume resume) {
-        if (checkExist(resume.getUuid())) {
-            int indexOfResume = Arrays.asList(getAll()).indexOf(resume);
-            storage[indexOfResume] = resume;
+        if (getIndex(resume.getUuid()) >= 0) {
+            storage[getIndex(resume.getUuid())] = resume;
         } else {
             System.err.println("ERROR Unable to update " + resume.getUuid() + ": There is no such resume in database");
         }
     }
 
     public void save(Resume resume) {
-        if (checkExist(resume.getUuid())) {
+        if (getIndex(resume.getUuid()) >= 0) {
             System.err.println("ERROR Unable to save " + resume.getUuid() + ": Resume already exist in database");
         } else if (storage.length == countResumes) {
             System.err.println("ERROR Unable to save " + resume.getUuid() + ": Resume database is full");
@@ -49,31 +48,21 @@ public class ArrayStorage {
     }
 
     public Resume get(String uuid) {
-        if (!checkExist(uuid)) {
+        if (getIndex(uuid) < 0) {
             System.err.println("ERROR Unable to get " + uuid + ": There is no such resume in database");
         } else {
-            for (int i = 0; i < countResumes; i++) {
-                if (storage[i].toString().equals(uuid)) {
-                    return storage[i];
-                }
-            }
+            return storage[getIndex(uuid)];
         }
         return null;
     }
 
     public void delete(String uuid) {
-        if (!checkExist(uuid)) {
+        if (getIndex(uuid) < 0) {
             System.err.println("ERROR Unable to delete " + uuid + ": There is no such resume in database");
         } else {
-            for (int i = 0; i < countResumes; i++) {
-                if (storage[i].toString().equals(uuid)) {
-                    while (i < countResumes - 1) {
-                        storage[i] = storage[++i];
-                    }
-                    storage[i] = null;
-                    countResumes--;
-                }
-            }
+            storage[getIndex(uuid)] = storage[countResumes - 1];
+            storage[countResumes - 1] = null;
+            countResumes--;
         }
     }
 
