@@ -38,7 +38,8 @@ public abstract class AbstractArrayStorage implements Storage {
         } else if (STORAGE_LIMIT == countResumes) {
             System.err.println("ERROR Unable to save " + resume.getUuid() + ": Resume database is full");
         } else {
-            add(resume);
+            insertResume(resume);
+            countResumes++;
         }
     }
 
@@ -47,7 +48,7 @@ public abstract class AbstractArrayStorage implements Storage {
         if (index < 0) {
             System.err.println("ERROR Unable to delete " + uuid + ": There is no such resume in database");
         } else {
-            remove(index);
+            removeResume(index);
         }
     }
 
@@ -61,9 +62,9 @@ public abstract class AbstractArrayStorage implements Storage {
         return null;
     }
 
-    protected abstract void add(Resume resume);
+    protected abstract void insertResume(Resume resume);
 
-    protected abstract void remove(int index);
+    protected abstract void removeResume(int index);
 
     protected abstract int getIndex(String uuid);
 }
