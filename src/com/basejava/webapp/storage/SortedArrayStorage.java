@@ -15,11 +15,7 @@ public class SortedArrayStorage extends AbstractArrayStorage {
 
     @Override
     protected void removeResume(int index) {
-        while (index < countResumes - 1) {
-            storage[index] = storage[++index];
-        }
-        storage[index] = null;
-        countResumes--;
+        System.arraycopy(storage, index + 1, storage, index, countResumes - (index + 1));
     }
 
     @Override

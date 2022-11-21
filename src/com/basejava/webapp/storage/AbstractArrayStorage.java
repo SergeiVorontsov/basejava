@@ -49,6 +49,8 @@ public abstract class AbstractArrayStorage implements Storage {
             System.err.println("ERROR Unable to delete " + uuid + ": There is no such resume in database");
         } else {
             removeResume(index);
+            storage[countResumes - 1] = null;
+            countResumes--;
         }
     }
 
