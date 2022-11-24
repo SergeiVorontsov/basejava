@@ -1,5 +1,8 @@
 package com.basejava.webapp.storage;
 
+import com.basejava.webapp.exception.ExistStorageException;
+import com.basejava.webapp.exception.NotExistStorageException;
+import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
 import java.util.Arrays;
@@ -23,30 +26,30 @@ public abstract class AbstractArrayStorage implements Storage {
         return Arrays.copyOf(storage, countResumes);
     }
 
-    public void update(Resume resume) {
+    public void update(Resume resume) throws NotExistStorageException {
         if (getIndex(resume.getUuid()) >= 0) {
             storage[getIndex(resume.getUuid())] = resume;
         } else {
-            System.err.println("ERROR Unable to update " + resume.getUuid() + ": There is no such resume in database");
+            throw new NotExistStorageException(resume.getUuid());
         }
     }
 
-    public void save(Resume resume) {
+    public void save(Resume resume) throws StorageException {
         int index = getIndex(resume.getUuid());
         if (index >= 0) {
-            System.err.println("ERROR Unable to save " + resume.getUuid() + ": Resume already exist in database");
+            throw new ExistStorageException(resume.getUuid());
         } else if (STORAGE_LIMIT == countResumes) {
-            System.err.println("ERROR Unable to save " + resume.getUuid() + ": Resume database is full");
+            throw new StorageException("Resume database is full", resume.getUuid());
         } else {
-            insertResume(resume);
+            insertResume(resume, index);
             countResumes++;
         }
     }
 
-    public void delete(String uuid) {
+    public void delete(String uuid) throws NotExistStorageException {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.err.println("ERROR Unable to delete " + uuid + ": There is no such resume in database");
+            throw new NotExistStorageException(uuid);
         } else {
             removeResume(index);
             storage[countResumes - 1] = null;
@@ -54,17 +57,16 @@ public abstract class AbstractArrayStorage implements Storage {
         }
     }
 
-    public Resume get(String uuid) {
+    public Resume get(String uuid) throws NotExistStorageException {
         int index = getIndex(uuid);
         if (index < 0) {
-            System.err.println("ERROR Unable to get " + uuid + ": There is no such resume in database");
+            throw new NotExistStorageException(uuid);
         } else {
             return storage[index];
         }
-        return null;
     }
 
-    protected abstract void insertResume(Resume resume);
+    protected abstract void insertResume(Resume resume, int index);
 
     protected abstract void removeResume(int index);
 

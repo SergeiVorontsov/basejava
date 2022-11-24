@@ -11,7 +11,7 @@ public class ArrayStorage extends AbstractArrayStorage {
      * @return array, contains only Resumes in storage (without null)
      */
 
-    protected void insertResume(Resume resume) {
+    protected void insertResume(Resume resume, int index) {
         storage[countResumes] = resume;
     }
 
