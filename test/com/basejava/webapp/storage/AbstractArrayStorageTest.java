@@ -11,7 +11,7 @@ import org.junit.Test;
 import java.lang.reflect.Field;
 
 import static com.basejava.webapp.storage.AbstractArrayStorage.STORAGE_LIMIT;
-import static org.junit.Assert.*;
+
 
 public abstract class AbstractArrayStorageTest {
     public static final String UUID_1 = "uuid1";
@@ -74,7 +74,7 @@ public abstract class AbstractArrayStorageTest {
         Resume currentResume = currentStorage[0];
         field.setAccessible(false);
         storage.update(testResume);
-        assertEquals(testResume, currentResume);
+        Assert.assertEquals(testResume, currentResume);
 
     }
 
@@ -86,7 +86,7 @@ public abstract class AbstractArrayStorageTest {
     @Test
     public void save() throws StorageException {
         storage.save(new Resume());
-        assertEquals(4, storage.size());
+        Assert.assertEquals(4, storage.size());
     }
 
     @Test(expected = ExistStorageException.class)
@@ -101,7 +101,7 @@ public abstract class AbstractArrayStorageTest {
                 storage.save(new Resume());
             }
         } catch (StorageException e) {
-            fail("Database overflow is to early");
+            Assert.fail("Database overflow is to early");
         }
         storage.save(new Resume());
     }
@@ -111,9 +111,9 @@ public abstract class AbstractArrayStorageTest {
         storage.delete(UUID_1);
         try {
             storage.get(UUID_1);
-            fail("Resume is not deleted from storage");
+            Assert.fail("Resume is not deleted from storage");
         } catch (NotExistStorageException e) {
-            assertNotNull(e);
+            Assert.assertNotNull(e);
         }
     }
 
