@@ -50,17 +50,12 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void getAll() {
-        Resume[] testResumeArr = storage.getAll();
-        Assert.assertEquals(3, testResumeArr.length);
-        for (Resume resume : testResumeArr) {
-            Assert.assertNotNull(resume);
-        }
+        Assert.assertEquals(3, storage.getAll().length);
     }
 
     @Test
     public void getAllNotNull() {
-        Resume[] testResumeArr = storage.getAll();
-        for (Resume resume : testResumeArr) {
+        for (Resume resume : storage.getAll()) {
             Assert.assertNotNull(resume);
         }
     }
