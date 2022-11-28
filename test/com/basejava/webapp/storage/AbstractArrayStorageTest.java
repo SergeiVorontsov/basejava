@@ -62,8 +62,9 @@ public abstract class AbstractArrayStorageTest {
 
     @Test
     public void update() throws NotExistStorageException {
-        storage.update(RESUME_1);
-        Assert.assertSame(RESUME_1, storage.get(UUID_1)); // Compare links, if equal there is the same one object
+        Resume tempResume = new Resume(UUID_1);
+        storage.update(tempResume);
+        Assert.assertSame(tempResume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
