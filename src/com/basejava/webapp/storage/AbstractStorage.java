@@ -9,40 +9,36 @@ public abstract class AbstractStorage implements Storage {
 
     @Override
     public void update(Resume resume) throws NotExistStorageException {
-        Object searchKey = getSearchKey(resume.getUuid());
-        getExistingSearchKey(searchKey, resume.getUuid());
-        setResume(resume, searchKey);
+        setResume(resume, getExistingSearchKey(resume.getUuid()));
     }
 
     @Override
     public void save(Resume resume) throws StorageException {
-        Object searchKey = getSearchKey(resume.getUuid());
-        getNotExistingSearchKey(searchKey, resume.getUuid());
-        insertResume(resume, searchKey);
+        insertResume(resume, getNotExistingSearchKey(resume.getUuid()));
     }
 
     @Override
     public void delete(String uuid) throws NotExistStorageException {
-        Object searchKey = getSearchKey(uuid);
-        getExistingSearchKey(searchKey, uuid);
-        removeResume(searchKey);
+        removeResume(getExistingSearchKey(uuid));
     }
 
     @Override
     public Resume get(String uuid) throws NotExistStorageException {
-        Object searchKey = getSearchKey(uuid);
-        getExistingSearchKey(searchKey, uuid);
-        return getResume(searchKey);
+        return getResume(getExistingSearchKey(uuid));
     }
 
-    private void getExistingSearchKey(Object searchKey, String uuid) throws NotExistStorageException {
+    private Object getExistingSearchKey(String uuid) throws NotExistStorageException {
+        Object searchKey = getSearchKey(uuid);
         if (!isExist(searchKey))
             throw new NotExistStorageException(uuid);
+        return searchKey;
     }
 
-    private void getNotExistingSearchKey(Object searchKey, String uuid) throws ExistStorageException {
+    private Object getNotExistingSearchKey(String uuid) throws ExistStorageException {
+        Object searchKey = getSearchKey(uuid);
         if (isExist(searchKey))
             throw new ExistStorageException(uuid);
+        return searchKey;
     }
 
     public abstract int size();
