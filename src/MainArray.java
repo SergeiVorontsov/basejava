@@ -1,3 +1,4 @@
+import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.storage.ArrayStorage;
 import com.basejava.webapp.storage.Storage;
@@ -13,7 +14,7 @@ import java.io.InputStreamReader;
 public class MainArray {
     private final static Storage ARRAY_STORAGE = new ArrayStorage();
 
-    public static void main(String[] args) throws IOException {
+    public static void main(String[] args) throws IOException, StorageException {
         BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
         Resume resume;
         while (true) {
@@ -35,8 +36,7 @@ public class MainArray {
                     System.out.println(ARRAY_STORAGE.size());
                     break;
                 case "save":
-                    resume = new Resume();
-                    resume.setUuid(uuid);
+                    resume = new Resume(uuid);
                     ARRAY_STORAGE.save(resume);
                     printAll();
                     break;
