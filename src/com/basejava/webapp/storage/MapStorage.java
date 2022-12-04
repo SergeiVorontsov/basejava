@@ -3,9 +3,10 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.model.Resume;
 
 import java.util.LinkedHashMap;
+import java.util.Map;
 
 public class MapStorage extends AbstractStorage {
-    protected static final LinkedHashMap<String, Resume> storage = new LinkedHashMap<>();
+    protected static final Map<String, Resume> storage = new LinkedHashMap<>();
 
     @Override
     public int size() {
@@ -29,7 +30,7 @@ public class MapStorage extends AbstractStorage {
 
     @Override
     protected void setResume(Resume resume, Object searchKey) {
-        storage.replace((String) searchKey, resume);
+        storage.put((String) searchKey, resume);
     }
 
     @Override
