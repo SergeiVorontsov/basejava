@@ -5,7 +5,14 @@ import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 
+import java.util.Comparator;
+import java.util.List;
+
 public abstract class AbstractStorage implements Storage {
+
+    protected static final Comparator<Resume> resumeComparator
+            = Comparator.nullsLast(Comparator.comparing(Resume::getFullName, String::compareTo)
+            .thenComparing(Resume::getUuid, String::compareTo));
 
     @Override
     public void update(Resume resume) throws NotExistStorageException {
@@ -47,7 +54,7 @@ public abstract class AbstractStorage implements Storage {
 
     public abstract void clear();
 
-    public abstract Resume[] getAll();
+    public abstract List<Resume> getAllSorted();
 
     protected abstract void insertResume(Resume resume, Object searchKey) throws StorageException;
 

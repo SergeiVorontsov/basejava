@@ -8,15 +8,23 @@ import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
 
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.List;
+
 public abstract class AbstractStorageTest {
     public static final String UUID_1 = "uuid1";
     public static final String UUID_2 = "uuid2";
     public static final String UUID_3 = "uuid3";
     public static final String UUID_4 = "uuid4";
-    public static final Resume RESUME_1 = new Resume(UUID_1);
-    public static final Resume RESUME_2 = new Resume(UUID_2);
-    public static final Resume RESUME_3 = new Resume(UUID_3);
-    public static final Resume RESUME_4 = new Resume(UUID_4);
+    public static final String FULLNAME_1 = "Bob";
+    public static final String FULLNAME_2 = "Jack";
+    public static final String FULLNAME_3 = "Tom";
+    public static final String FULLNAME_4 = "Mary";
+    public static final Resume RESUME_1 = new Resume(UUID_1, FULLNAME_1);
+    public static final Resume RESUME_2 = new Resume(UUID_2, FULLNAME_2);
+    public static final Resume RESUME_3 = new Resume(UUID_3, FULLNAME_3);
+    public static final Resume RESUME_4 = new Resume(UUID_4, FULLNAME_4);
     public static final String UUID_NOT_EXIST = "dummy";
     protected final Storage storage;
 
@@ -41,19 +49,20 @@ public abstract class AbstractStorageTest {
     public void testClear() {
         storage.clear();
         assertSize(0);
-        Assert.assertArrayEquals(new Resume[0], storage.getAll());
+        Assert.assertEquals(storage.getAllSorted(), Collections.emptyList());
+        //Assert.assertTrue(storage.getAllSorted().isEmpty()); // the second var
     }
 
     @Test
-    public void testGetAll() {
-        Resume[] expected = {RESUME_1, RESUME_2, RESUME_3};
-        Assert.assertArrayEquals(expected, storage.getAll());
+    public void testGetAllSorted() {
+        List<Resume> expected = Arrays.asList(RESUME_1, RESUME_2, RESUME_3);
+        Assert.assertEquals(expected, storage.getAllSorted());
         assertSize(3);
     }
 
     @Test
     public void testGetAllNotNull() {
-        for (Resume resume : storage.getAll()) {
+        for (Resume resume : storage.getAllSorted()) {
             Assert.assertNotNull(resume);
         }
     }
