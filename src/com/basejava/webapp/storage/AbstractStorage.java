@@ -10,7 +10,7 @@ import java.util.List;
 
 public abstract class AbstractStorage implements Storage {
 
-    protected static final Comparator<Resume> resumeComparator
+    private static final Comparator<Resume> resumeComparator
             = Comparator.nullsLast(Comparator.comparing(Resume::getFullName, String::compareTo)
             .thenComparing(Resume::getUuid, String::compareTo));
 
@@ -50,11 +50,17 @@ public abstract class AbstractStorage implements Storage {
         return searchKey;
     }
 
+    public List<Resume> getAllSorted() {
+        List<Resume> list = getListStorage();
+        list.sort(resumeComparator);
+        return list;
+    }
+
     public abstract int size();
 
     public abstract void clear();
 
-    public abstract List<Resume> getAllSorted();
+    protected abstract List<Resume> getListStorage();
 
     protected abstract void insertResume(Resume resume, Object searchKey) throws StorageException;
 

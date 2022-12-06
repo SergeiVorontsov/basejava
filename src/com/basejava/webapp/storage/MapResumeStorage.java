@@ -21,10 +21,8 @@ public class MapResumeStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getAllSorted() {
-        List<Resume> listResume = new ArrayList<>(storage.values());
-        listResume.sort(resumeComparator);
-        return listResume;
+    public List<Resume> getListStorage() {
+        return new ArrayList<>(storage.values());
     }
 
     @Override
