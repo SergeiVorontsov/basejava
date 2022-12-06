@@ -27,44 +27,33 @@ public class MapResumeStorage extends AbstractStorage {
 
     @Override
     public void removeResume(Object searchKey) {
-        storage.remove((String) searchKey);
+        Resume resume = (Resume) searchKey;
+        storage.remove(resume.getUuid());
     }
 
     @Override
     protected void setResume(Resume resume, Object searchKey) {
-        storage.put((String) searchKey, resume);
+        Resume oldResume = (Resume) searchKey;
+        storage.put(oldResume.getUuid(), resume);
     }
 
     @Override
     public Resume getResume(Object searchKey) {
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            String key = entry.getKey();
-            Resume value = entry.getValue();
-            if (value.getFullName().equalsIgnoreCase((String) searchKey)) {
-                return value;
-            }
-        }
-        return null;
+        return (Resume) searchKey;
     }
 
     @Override
     protected void insertResume(Resume resume, Object searchKey) {
-        storage.put((String) searchKey, resume);
+        storage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected Object getSearchKey(String fullName) {
-
-        for (Map.Entry<String, Resume> entry : storage.entrySet()) {
-            String key = entry.getKey();
-            Resume value = entry.getValue();
-            return value.getFullName().equalsIgnoreCase(fullName);
-        }
-        return null;
+    protected Object getSearchKey(String uuid) {
+        return storage.get(uuid);
     }
 
     @Override
-    protected boolean isExist(Object fullName) {
-        return fullName != null;
+    protected boolean isExist(Object resume) {
+        return resume != null;
     }
 }

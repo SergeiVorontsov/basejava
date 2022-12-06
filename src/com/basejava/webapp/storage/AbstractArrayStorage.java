@@ -30,7 +30,6 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
         return asList(Arrays.copyOf(storage, countResumes));
     }
 
-
     @Override
     protected void setResume(Resume resume, Object searchKey) {
         storage[(int) searchKey] = resume;
