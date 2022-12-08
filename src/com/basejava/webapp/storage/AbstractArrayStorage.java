@@ -6,9 +6,7 @@ import com.basejava.webapp.model.Resume;
 import java.util.Arrays;
 import java.util.List;
 
-import static java.util.Arrays.asList;
-
-public abstract class AbstractArrayStorage extends AbstractStorage {
+public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     protected static final int STORAGE_LIMIT = 10000;
 
     protected final Resume[] storage = new Resume[STORAGE_LIMIT];
@@ -26,40 +24,40 @@ public abstract class AbstractArrayStorage extends AbstractStorage {
     }
 
     @Override
-    public List<Resume> getListStorage() {
-        return asList(Arrays.copyOf(storage, countResumes));
+    public List<Resume> getCopyStorageList() {
+        return Arrays.asList(Arrays.copyOf(storage, countResumes));
     }
 
     @Override
-    protected void setResume(Resume resume, Object searchKey) {
-        storage[(int) searchKey] = resume;
+    protected void setResume(Resume resume, Integer searchKey) {
+        storage[searchKey] = resume;
     }
 
     @Override
-    protected void insertResume(Resume resume, Object searchKey) throws StorageException {
+    protected void insertResume(Resume resume, Integer searchKey) throws StorageException {
         if (STORAGE_LIMIT == countResumes) {
             throw new StorageException("Resume database is full", resume.getUuid());
         } else {
-            insertResumeInArray(resume, (int) searchKey);
+            insertResumeInArray(resume, searchKey);
             countResumes++;
         }
     }
 
     @Override
-    protected void removeResume(Object searchKey) {
-        removeResumeInArray((int) searchKey);
+    protected void removeResume(Integer searchKey) {
+        removeResumeInArray(searchKey);
         storage[countResumes - 1] = null;
         countResumes--;
     }
 
     @Override
-    protected Resume getResume(Object searchKey) {
-        return storage[(int) searchKey];
+    protected Resume getResume(Integer searchKey) {
+        return storage[searchKey];
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return (int) searchKey >= 0;
+    protected boolean isExist(Integer searchKey) {
+        return searchKey >= 0;
     }
 
     protected abstract void insertResumeInArray(Resume resume, int index);

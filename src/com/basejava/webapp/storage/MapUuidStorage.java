@@ -7,51 +7,51 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapUuidStorage extends AbstractStorage {
-    protected static final Map<String, Resume> storage = new HashMap<>();
+public class MapUuidStorage extends AbstractStorage<String> {
+    protected static final Map<String, Resume> mapUuidStorage = new HashMap<>();
 
     @Override
     public int size() {
-        return storage.size();
+        return mapUuidStorage.size();
     }
 
     @Override
     public void clear() {
-        storage.clear();
+        mapUuidStorage.clear();
     }
 
     @Override
-    public List<Resume> getListStorage() {
-        return new ArrayList<>(storage.values());
+    public List<Resume> getCopyStorageList() {
+        return new ArrayList<>(mapUuidStorage.values());
     }
 
     @Override
-    public void removeResume(Object searchKey) {
-        storage.remove((String) searchKey);
+    public void removeResume(String searchKey) {
+        mapUuidStorage.remove(searchKey);
     }
 
     @Override
-    protected void setResume(Resume resume, Object searchKey) {
-        storage.put((String) searchKey, resume);
+    protected void setResume(Resume resume, String searchKey) {
+        mapUuidStorage.put(searchKey, resume);
     }
 
     @Override
-    public Resume getResume(Object searchKey) {
-        return storage.get((String) searchKey);
+    public Resume getResume(String searchKey) {
+        return mapUuidStorage.get(searchKey);
     }
 
     @Override
-    protected void insertResume(Resume resume, Object searchKey) {
-        storage.put((String) searchKey, resume);
+    protected void insertResume(Resume resume, String searchKey) {
+        mapUuidStorage.put(searchKey, resume);
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
+    protected String getSearchKey(String uuid) {
         return uuid;
     }
 
     @Override
-    protected boolean isExist(Object searchKey) {
-        return storage.containsKey((String) searchKey);
+    protected boolean isExist(String searchKey) {
+        return mapUuidStorage.containsKey(searchKey);
     }
 }

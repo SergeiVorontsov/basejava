@@ -8,7 +8,7 @@ import com.basejava.webapp.model.Resume;
 import java.util.Comparator;
 import java.util.List;
 
-public abstract class AbstractStorage implements Storage {
+public abstract class AbstractStorage<T> implements Storage {
 
     private static final Comparator<Resume> resumeComparator
             = Comparator.nullsLast(Comparator.comparing(Resume::getFullName, String::compareTo)
@@ -34,16 +34,16 @@ public abstract class AbstractStorage implements Storage {
         return getResume(getExistingSearchKey(uuid));
     }
 
-    private Object getExistingSearchKey(String uuid) throws NotExistStorageException {
-        Object searchKey = getSearchKey(uuid);
+    private T getExistingSearchKey(String uuid) throws NotExistStorageException {
+        T searchKey = getSearchKey(uuid);
         if (!isExist(searchKey)) {
             throw new NotExistStorageException(uuid);
         }
         return searchKey;
     }
 
-    private Object getNotExistingSearchKey(String uuid) throws ExistStorageException {
-        Object searchKey = getSearchKey(uuid);
+    private T getNotExistingSearchKey(String uuid) throws ExistStorageException {
+        T searchKey = getSearchKey(uuid);
         if (isExist(searchKey)) {
             throw new ExistStorageException(uuid);
         }
@@ -51,7 +51,7 @@ public abstract class AbstractStorage implements Storage {
     }
 
     public List<Resume> getAllSorted() {
-        List<Resume> list = getListStorage();
+        List<Resume> list = getCopyStorageList();
         list.sort(resumeComparator);
         return list;
     }
@@ -60,17 +60,17 @@ public abstract class AbstractStorage implements Storage {
 
     public abstract void clear();
 
-    protected abstract List<Resume> getListStorage();
+    protected abstract List<Resume> getCopyStorageList();
 
-    protected abstract void insertResume(Resume resume, Object searchKey) throws StorageException;
+    protected abstract void insertResume(Resume resume, T searchKey) throws StorageException;
 
-    protected abstract void removeResume(Object searchKey);
+    protected abstract void removeResume(T searchKey);
 
-    protected abstract void setResume(Resume resume, Object searchKey);
+    protected abstract void setResume(Resume resume, T searchKey);
 
-    protected abstract Resume getResume(Object searchKey);
+    protected abstract Resume getResume(T searchKey);
 
-    protected abstract Object getSearchKey(String uuid);
+    protected abstract T getSearchKey(String uuid);
 
-    protected abstract boolean isExist(Object searchKey);
+    protected abstract boolean isExist(T searchKey);
 }

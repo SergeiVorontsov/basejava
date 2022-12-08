@@ -7,53 +7,51 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
-public class MapResumeStorage extends AbstractStorage {
-    protected static final Map<String, Resume> storage = new HashMap<>();
+public class MapResumeStorage extends AbstractStorage<Resume> {
+    protected static final Map<String, Resume> mapResumeStorage = new HashMap<>();
 
     @Override
     public int size() {
-        return storage.size();
+        return mapResumeStorage.size();
     }
 
     @Override
     public void clear() {
-        storage.clear();
+        mapResumeStorage.clear();
     }
 
     @Override
-    public List<Resume> getListStorage() {
-        return new ArrayList<>(storage.values());
+    public List<Resume> getCopyStorageList() {
+        return new ArrayList<>(mapResumeStorage.values());
     }
 
     @Override
-    public void removeResume(Object searchKey) {
-        Resume resume = (Resume) searchKey;
-        storage.remove(resume.getUuid());
+    public void removeResume(Resume searchKey) {
+        mapResumeStorage.remove((searchKey).getUuid());
     }
 
     @Override
-    protected void setResume(Resume resume, Object searchKey) {
-        Resume oldResume = (Resume) searchKey;
-        storage.put(oldResume.getUuid(), resume);
+    protected void setResume(Resume resume, Resume searchKey) {
+        mapResumeStorage.put(searchKey.getUuid(), resume);
     }
 
     @Override
-    public Resume getResume(Object searchKey) {
-        return (Resume) searchKey;
+    public Resume getResume(Resume searchKey) {
+        return searchKey;
     }
 
     @Override
-    protected void insertResume(Resume resume, Object searchKey) {
-        storage.put(resume.getUuid(), resume);
+    protected void insertResume(Resume resume, Resume searchKey) {
+        mapResumeStorage.put(resume.getUuid(), resume);
     }
 
     @Override
-    protected Object getSearchKey(String uuid) {
-        return storage.get(uuid);
+    protected Resume getSearchKey(String uuid) {
+        return mapResumeStorage.get(uuid);
     }
 
     @Override
-    protected boolean isExist(Object resume) {
+    protected boolean isExist(Resume resume) {
         return resume != null;
     }
 }

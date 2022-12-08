@@ -1,23 +1,25 @@
+import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
-import com.basejava.webapp.storage.ArrayStorage;
+import com.basejava.webapp.storage.MapResumeStorage;
+import com.basejava.webapp.storage.Storage;
 
 /**
  * Test for your com.basejava.webapp.storage.ArrayStorage implementation
  */
 public class MainTestArrayStorage {
-    static final ArrayStorage ARRAY_STORAGE = new ArrayStorage();
+    static final Storage ARRAY_STORAGE = new MapResumeStorage();
 
-    public static void main(String[] args) {
-        Resume r1 = new Resume();
-        r1.setUuid("uuid1");
-        Resume r2 = new Resume();
-        r2.setUuid("uuid2");
-        Resume r3 = new Resume();
-        r3.setUuid("uuid3");
+    public static void main(String[] args) throws StorageException {
+        Resume r1 = new Resume("uuid1", "Sergey");
+        Resume r2 = new Resume("uuid2", "Max");
+        Resume r3 = new Resume("uuid3", "Aleksander");
+        Resume r4 = new Resume("uuid1", "Aleksander");
 
         ARRAY_STORAGE.save(r1);
         ARRAY_STORAGE.save(r2);
         ARRAY_STORAGE.save(r3);
+
+        System.out.println("Get all: " + ARRAY_STORAGE.getAllSorted());
 
         System.out.println("Get r1: " + ARRAY_STORAGE.get(r1.getUuid()));
         System.out.println("Size: " + ARRAY_STORAGE.size());
@@ -27,7 +29,7 @@ public class MainTestArrayStorage {
         printAll();
         ARRAY_STORAGE.delete(r1.getUuid());
 
-        r2.setUuid("uuid22");
+       // r2.setUuid("uuid22");
         ARRAY_STORAGE.update(r2);
 
         printAll();
@@ -39,7 +41,7 @@ public class MainTestArrayStorage {
 
     static void printAll() {
         System.out.println("\nGet All");
-        for (Resume r : ARRAY_STORAGE.getAll()) {
+        for (Resume r : ARRAY_STORAGE.getAllSorted()) {
             System.out.println(r);
         }
     }
