@@ -1,18 +1,46 @@
 package com.basejava.webapp.model;
 
-public class TextSection extends Section<String>{
-    private String value;
+import java.util.Objects;
 
-    public String getValue() {
-        return value;
+public class TextSection extends AbstractSection {
+    private String text;
+
+    @Override
+    public Object getItem() {
+        return text;
     }
 
     @Override
-    public void addValue( String value) {
-        this.value = value;
+    public void addItem(Object item) {
+        if (item instanceof String) {
+            this.text = (String) item;
+        } else {
+            throw new ClassCastException("The selected section cannot store this kind of data");
+        }
     }
 
-    public void setValue(String value) {
-        this.value = value;
+    @Override
+    public void deleteItem() {
+            text = "";
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        TextSection that = (TextSection) o;
+
+        return Objects.equals(text, that.text);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hashCode(text);
+    }
+
+    @Override
+    public String toString() {
+        return text + '\n';
     }
 }

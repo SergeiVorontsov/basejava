@@ -1,7 +1,6 @@
 package com.basejava.webapp.model;
 
 import java.util.ArrayList;
-import java.util.ListIterator;
 import java.util.Objects;
 
 public class Contact {
@@ -18,49 +17,40 @@ public class Contact {
 
     public void addValue(String value) {
         Objects.requireNonNull(value, " value can`t be null");
-        if (this.value.size() == 0) {
-            this.value.add(value);
-        } else {
-            ListIterator<String> iter = this.value.listIterator();
-            while (iter.hasNext()) {
-                if (iter.next().equals(value)) {
-                    throw new RuntimeException(value + " this contact already exist");
-                } else {
-                    iter.add(value);
-                }
-            }
-        }
+        this.value.add(value);
     }
 
     public void deleteValue(String value) {
         Objects.requireNonNull(value, " value can`t be null");
-        ListIterator<String> iter = this.value.listIterator();
-        while (iter.hasNext()) {
-            if (iter.next().equals(value)) {
-                iter.remove();
-            } else {
-                throw new RuntimeException(value + " this contact dont exist");
-            }
-        }
+        this.value.removeIf(s -> s.equals(value));
     }
 
     public void updateValue(String oldValue, String newValue) {
         Objects.requireNonNull(newValue, " value can`t be null");
-        if (this.value.size() == 0) {
-            throw new RuntimeException(oldValue + " this contact not exist");
-        } else {
-            ListIterator<String> iter = this.value.listIterator();
-            while (iter.hasNext()) {
-                if (iter.next().equals(oldValue)) {
-                    iter.set(newValue);
-                }
-            }
-        }
+        value.set(value.indexOf(oldValue), newValue);
     }
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        Contact contact = (Contact) o;
+
+        return Objects.equals(value, contact.value);
+    }
+
+    @Override
+    public int hashCode() {
+        return value.hashCode();
+    }
 
     @Override
     public String toString() {
-        return String.join(",", value);
+        StringBuilder result = new StringBuilder();
+        for (String string : value) {
+            result.append(string).append('\n');
+        }
+        return result.toString();
     }
 }

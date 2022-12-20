@@ -4,19 +4,19 @@ import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 
-public class ListSection extends AbstractSection {
-    private final List<String> strings = new ArrayList<>();
+public class CompanySection extends AbstractSection {
+    private final List<Company> companies = new ArrayList<>();
 
     @Override
     public Object getItem() {
-        return strings;
+        return companies;
     }
 
     @Override
     public void addItem(Object item) {
         if (item instanceof ArrayList) {
             ArrayList result = (ArrayList) item;
-            this.strings.addAll(result);
+            this.companies.addAll(result);
         } else {
             throw new ClassCastException("The selected section cannot store this kind of data");
         }
@@ -24,7 +24,7 @@ public class ListSection extends AbstractSection {
 
     @Override
     public void deleteItem() {
-        Iterator<String> iterator = strings.iterator();
+        Iterator<Company> iterator = companies.iterator();
         {
             while (iterator.hasNext()) {
                 iterator.next();
@@ -38,21 +38,21 @@ public class ListSection extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ListSection section = (ListSection) o;
+        CompanySection that = (CompanySection) o;
 
-        return strings.equals(section.strings);
+        return companies.equals(that.companies);
     }
 
     @Override
     public int hashCode() {
-        return strings.hashCode();
+        return companies.hashCode();
     }
 
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        for (String string : strings) {
-            result.append('\u2022').append(string).append('\n');
+        for (Company company : companies) {
+            result.append(company);
         }
         return result.toString();
     }
