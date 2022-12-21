@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class ResumeTestData {
     public static void main(String[] args) {
@@ -262,11 +263,9 @@ public class ResumeTestData {
         }
         kislin.getSections().get(SectionType.EDUCATION).addItem(education);
 
-        System.out.println(kislin);
+        //  System.out.println(kislin);
 
-       // Can't get sections methods
-
-/*        StringBuilder stringBuilder = new StringBuilder();
+        StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(kislin.getFullName());
         for (Map.Entry<ContactType, Contact> contact : kislin.getContacts().entrySet()
         ) {
@@ -274,10 +273,44 @@ public class ResumeTestData {
         }
         for (Map.Entry<SectionType, AbstractSection> section : kislin.getSections().entrySet()
         ) {
-            stringBuilder.append((section.getKey().getTitle())).append(":\n");
-            String className = section.getValue().getItem().getClass().getName();
+            if (section.getValue() instanceof TextSection) {
+                stringBuilder.append((section.getKey().getTitle())).append(":\n");
+                System.out.println(stringBuilder);
+                TextSection textSection = (TextSection) section.getValue();
+                if (textSection.getItem() instanceof String) {
+                    String s = (String) textSection.getItem();
+                    stringBuilder.append(s).append(":\n");
+                }
+            }
+            if (section.getValue() instanceof ListSection) {
+                stringBuilder.append((section.getKey().getTitle())).append(":\n");
+                ListSection listSection = (ListSection) section.getValue();
+                if (listSection.getItem() instanceof ArrayList) {
+                    ArrayList<String> array = (ArrayList) listSection.getItem();
+                    for (String s : array) {
+                        stringBuilder.append(s).append(":\n");
+                    }
+                }
+            }
+            if (section.getValue() instanceof CompanySection) {
+                stringBuilder.append((section.getKey().getTitle())).append(":\n");
+                CompanySection companySection = (CompanySection) section.getValue();
+                if (companySection.getItem() instanceof ArrayList) {
+                    ArrayList<Company> array = (ArrayList) companySection.getItem();
+                    for (Company k : array) {
+                        stringBuilder.append(k.getTitle()).append(" ");
+                        stringBuilder.append(k.getWebsite()).append(":\n");
+                        for (Period p : k.getPeriods()) {
+                            stringBuilder.append(p.getDateFrom()).append(" - ");
+                            stringBuilder.append(p.getDateTo()).append("  ");
+                            stringBuilder.append(p.getTitle()).append(":\n");
+                            stringBuilder.append(p.getDescription()).append(":\n");
+                        }
+                    }
+                }
+            }
         }
 
-        System.out.println(stringBuilder);*/
+        System.out.println(stringBuilder);
     }
 }
