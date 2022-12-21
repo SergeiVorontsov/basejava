@@ -280,7 +280,6 @@ public class ResumeTestData {
         ) {
             if (section.getValue() instanceof TextSection) {
                 stringBuilder.append(section.getKey().getTitle()).append(":\n");
-                System.out.println(stringBuilder);
                 TextSection textSection = (TextSection) section.getValue();
                 if (textSection.getItem() instanceof String) {
                     String s = (String) textSection.getItem();
