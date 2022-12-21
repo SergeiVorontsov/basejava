@@ -51,7 +51,7 @@ public class Resume implements Comparable<Resume> {
     }
 
     public String getFullName() {
-        return uuid;
+        return fullName;
     }
 
     // Contacts

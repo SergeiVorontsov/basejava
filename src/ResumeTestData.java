@@ -266,24 +266,29 @@ public class ResumeTestData {
         //  System.out.println(kislin);
 
         StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(kislin.getFullName());
+        stringBuilder.append(kislin.getFullName()).append("\n");
         for (Map.Entry<ContactType, Contact> contact : kislin.getContacts().entrySet()
         ) {
-            stringBuilder.append(contact.getKey().getTitle()).append(": ").append(contact.getValue());
+            stringBuilder.append(contact.getKey().getTitle()).append(": ");
+            for (String s : contact.getValue().getValue()
+            ) {
+                stringBuilder.append(s).append(",");
+            }
+            stringBuilder.append("\n");
         }
         for (Map.Entry<SectionType, AbstractSection> section : kislin.getSections().entrySet()
         ) {
             if (section.getValue() instanceof TextSection) {
-                stringBuilder.append((section.getKey().getTitle())).append(":\n");
+                stringBuilder.append(section.getKey().getTitle()).append(":\n");
                 System.out.println(stringBuilder);
                 TextSection textSection = (TextSection) section.getValue();
                 if (textSection.getItem() instanceof String) {
                     String s = (String) textSection.getItem();
-                    stringBuilder.append(s).append(":\n");
+                    stringBuilder.append(s).append("\n");
                 }
             }
             if (section.getValue() instanceof ListSection) {
-                stringBuilder.append((section.getKey().getTitle())).append(":\n");
+                stringBuilder.append(section.getKey().getTitle()).append(":\n");
                 ListSection listSection = (ListSection) section.getValue();
                 if (listSection.getItem() instanceof ArrayList) {
                     ArrayList<String> array = (ArrayList) listSection.getItem();
@@ -299,18 +304,18 @@ public class ResumeTestData {
                     ArrayList<Company> array = (ArrayList) companySection.getItem();
                     for (Company k : array) {
                         stringBuilder.append(k.getTitle()).append(" ");
-                        stringBuilder.append(k.getWebsite()).append(":\n");
+                        stringBuilder.append(k.getWebsite()).append("\n");
                         for (Period p : k.getPeriods()) {
                             stringBuilder.append(p.getDateFrom()).append(" - ");
                             stringBuilder.append(p.getDateTo()).append("  ");
-                            stringBuilder.append(p.getTitle()).append(":\n");
-                            stringBuilder.append(p.getDescription()).append(":\n");
+                            stringBuilder.append(p.getTitle()).append("\n");
+                            stringBuilder.append(p.getDescription()).append("\n");
                         }
                     }
                 }
             }
         }
 
-        System.out.println(stringBuilder);
+        System.out.printf(stringBuilder.toString());
     }
 }
