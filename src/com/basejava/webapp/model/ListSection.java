@@ -1,36 +1,13 @@
 package com.basejava.webapp.model;
 
 import java.util.ArrayList;
-import java.util.Iterator;
 import java.util.List;
 
 public class ListSection extends AbstractSection {
     private final List<String> strings = new ArrayList<>();
 
-    @Override
-    public Object getItem() {
+    public List<String> getList() {
         return strings;
-    }
-
-    @Override
-    public void addItem(Object item) {
-        if (item instanceof ArrayList) {
-            ArrayList result = (ArrayList) item;
-            this.strings.addAll(result);
-        } else {
-            throw new ClassCastException("The selected section cannot store this kind of data");
-        }
-    }
-
-    @Override
-    public void deleteItem() {
-        Iterator<String> iterator = strings.iterator();
-        {
-            while (iterator.hasNext()) {
-                iterator.next();
-                iterator.remove();
-            }
-        }
     }
 
     @Override

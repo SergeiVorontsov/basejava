@@ -1,9 +1,6 @@
 package com.basejava.webapp.model;
 
-import java.util.EnumMap;
-import java.util.Map;
-import java.util.Objects;
-import java.util.UUID;
+import java.util.*;
 
 /**
  * Initial resume class
@@ -11,7 +8,7 @@ import java.util.UUID;
 public class Resume implements Comparable<Resume> {
 
     private final String uuid;
-    private final String fullName;
+    private String fullName;
     private final Map<ContactType, Contact> contacts = new EnumMap<>(ContactType.class);
     private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
 
@@ -54,34 +51,16 @@ public class Resume implements Comparable<Resume> {
         return fullName;
     }
 
-    // Contacts
+    public void setFullName(String fullName) {
+        this.fullName = fullName;
+    }
+
     public Map<ContactType, Contact> getContacts() {
-        return contacts;
+        return Collections.unmodifiableMap(contacts);
     }
 
-    public void addContact(ContactType type, String value) {
-        contacts.get(type).addValue(value);
-    }
-
-    public void deleteContact(ContactType type, String value) {
-        contacts.get(type).deleteValue(value);
-    }
-
-    public void updateContact(ContactType type, String oldValue, String newValue) {
-        contacts.get(type).updateValue(oldValue, newValue);
-    }
-
-    // Sections
     public Map<SectionType, AbstractSection> getSections() {
-        return sections;
-    }
-
-    public void addSectionValue(SectionType type, Object item) {
-        sections.get(type).addItem(item);
-    }
-
-    public void deleteSectionValue(SectionType type) {
-        sections.get(type).deleteItem();
+        return Collections.unmodifiableMap(sections);
     }
 
     @Override

@@ -1,33 +1,22 @@
 package com.basejava.webapp.model;
 
-import java.util.ArrayList;
 import java.util.Objects;
 
 public class Contact {
 
-    private final ArrayList<String> value;
+    private String contact;
 
     public Contact() {
-        value = new ArrayList<>();
+        this.contact = "";
     }
 
-    public ArrayList<String> getValue() {
-        return value;
+    public String getContact() {
+        return contact;
     }
 
-    public void addValue(String value) {
-        Objects.requireNonNull(value, " value can`t be null");
-        this.value.add(value);
-    }
-
-    public void deleteValue(String value) {
-        Objects.requireNonNull(value, " value can`t be null");
-        this.value.removeIf(s -> s.equals(value));
-    }
-
-    public void updateValue(String oldValue, String newValue) {
-        Objects.requireNonNull(newValue, " value can`t be null");
-        value.set(value.indexOf(oldValue), newValue);
+    public void setContact(String contact) {
+        Objects.requireNonNull(contact, " value can`t be null");
+        this.contact = contact;
     }
 
     @Override
@@ -35,22 +24,18 @@ public class Contact {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        Contact contact = (Contact) o;
+        Contact contact1 = (Contact) o;
 
-        return Objects.equals(value, contact.value);
+        return Objects.equals(contact, contact1.contact);
     }
 
     @Override
     public int hashCode() {
-        return value.hashCode();
+        return contact != null ? contact.hashCode() : 0;
     }
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        for (String string : value) {
-            result.append(string).append('\n');
-        }
-        return result.toString();
+        return contact + '\n';
     }
 }

@@ -9,9 +9,6 @@ public class Period {
     private LocalDate dateFrom;
     private LocalDate dateTo;
 
-    public Period() {
-    }
-
     public String getTitle() {
         return title;
     }

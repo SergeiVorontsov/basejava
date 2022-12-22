@@ -7,6 +7,26 @@ import java.util.List;
 import java.util.Map;
 
 public class ResumeTestData {
+    public static void addContact(Resume resume, ContactType type, String value) {
+        resume.getContacts().get(type).setContact(value);
+    }
+
+    @SuppressWarnings("unchecked")
+    public static void addSection(Resume resume, SectionType type, Object value) {
+        Object section = resume.getSections().get(type);
+        if (section instanceof TextSection) {
+            ((TextSection) section).setText((String) value);
+        }
+        if (section instanceof ListSection) {
+            ((ListSection) section).getList().clear();
+            ((ListSection) section).getList().addAll((ArrayList<String>) value);
+        }
+        if (section instanceof CompanySection) {
+            ((CompanySection) section).getCompanies().clear();
+            ((CompanySection) section).getCompanies().addAll((ArrayList<Company>) value);
+        }
+    }
+
     public static void main(String[] args) {
         String email = "gkislin@yandex.ru";
         String tel = "+7(921) 855-0482";
@@ -46,21 +66,20 @@ public class ResumeTestData {
 
         Resume kislin = new Resume("Кислин Григорий");
 
-        kislin.addContact(ContactType.EMAIL, email);
-        kislin.addContact(ContactType.PHONE, tel);
-        kislin.addContact(ContactType.SKYPE, skype);
-        kislin.addContact(ContactType.LINKEDIN, link);
-        kislin.addContact(ContactType.GITHUB, git);
-        kislin.addContact(ContactType.STACKOVERFLOW, stack);
-        kislin.addContact(ContactType.WEB, web);
+        addContact(kislin, ContactType.EMAIL, email);
+        addContact(kislin, ContactType.PHONE, tel);
+        addContact(kislin, ContactType.SKYPE, skype);
+        addContact(kislin, ContactType.LINKEDIN, link);
+        addContact(kislin, ContactType.GITHUB, git);
+        addContact(kislin, ContactType.STACKOVERFLOW, stack);
+        addContact(kislin, ContactType.WEB, web);
 
-        kislin.addSectionValue(SectionType.OBJECTIVE, objective);
-        kislin.addSectionValue(SectionType.PERSONAL, personal);
-        kislin.addSectionValue(SectionType.ACHIEVEMENT, achievement);
-        kislin.addSectionValue(SectionType.QUALIFICATIONS, qualification);
+        addSection(kislin, SectionType.OBJECTIVE, objective);
+        addSection(kislin, SectionType.OBJECTIVE, objective);
+        addSection(kislin, SectionType.PERSONAL, personal);
+        addSection(kislin, SectionType.ACHIEVEMENT, achievement);
+        addSection(kislin, SectionType.QUALIFICATIONS, qualification);
 
-        //  kislin.deleteSectionValue(SectionType.OBJECTIVE);
-        //  kislin.deleteSectionValue(SectionType.QUALIFICATIONS);
 
         ArrayList<Company> experience = new ArrayList<>();
         {
@@ -175,7 +194,7 @@ public class ResumeTestData {
             experience.add(company);
         }
 
-        kislin.getSections().get(SectionType.EXPERIENCE).addItem(experience);
+        addSection(kislin, SectionType.EXPERIENCE, experience);
 
         ArrayList<Company> education = new ArrayList<>();
         {
@@ -261,46 +280,40 @@ public class ResumeTestData {
             company.setPeriods(periods);
             education.add(company);
         }
-        kislin.getSections().get(SectionType.EDUCATION).addItem(education);
+        addSection(kislin, SectionType.EDUCATION, education);
 
-        //  System.out.println(kislin);
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(kislin.getFullName()).append("\n");
         for (Map.Entry<ContactType, Contact> contact : kislin.getContacts().entrySet()
         ) {
             stringBuilder.append(contact.getKey().getTitle()).append(": ");
-            for (String s : contact.getValue().getValue()
-            ) {
-                stringBuilder.append(s).append(",");
-            }
-            stringBuilder.append("\n");
+            stringBuilder.append(contact.getValue().getContact()).append("\n");
         }
-        for (Map.Entry<SectionType, AbstractSection> section : kislin.getSections().entrySet()
+        for (Map.Entry<SectionType, AbstractSection> section : kislin.getSections().
+                entrySet()
         ) {
-            if (section.getValue() instanceof TextSection) {
+            AbstractSection currentSection = section.getValue();
+            if (currentSection instanceof TextSection) {
                 stringBuilder.append(section.getKey().getTitle()).append(":\n");
-                TextSection textSection = (TextSection) section.getValue();
-                if (textSection.getItem() instanceof String) {
-                    String s = (String) textSection.getItem();
-                    stringBuilder.append(s).append("\n");
-                }
+                TextSection textSection = (TextSection) currentSection;
+                stringBuilder.append(textSection.getText()).append("\n");
             }
-            if (section.getValue() instanceof ListSection) {
+            if (currentSection instanceof ListSection) {
                 stringBuilder.append(section.getKey().getTitle()).append(":\n");
-                ListSection listSection = (ListSection) section.getValue();
-                if (listSection.getItem() instanceof ArrayList) {
-                    ArrayList<String> array = (ArrayList) listSection.getItem();
+                ListSection listSection = (ListSection) currentSection;
+                if (listSection.getList() instanceof ArrayList) {
+                    ArrayList<String> array = (ArrayList<String>) listSection.getList();
                     for (String s : array) {
                         stringBuilder.append(s).append(":\n");
                     }
                 }
             }
-            if (section.getValue() instanceof CompanySection) {
+            if (currentSection instanceof CompanySection) {
                 stringBuilder.append((section.getKey().getTitle())).append(":\n");
-                CompanySection companySection = (CompanySection) section.getValue();
-                if (companySection.getItem() instanceof ArrayList) {
-                    ArrayList<Company> array = (ArrayList) companySection.getItem();
+                CompanySection companySection = (CompanySection) currentSection;
+                if (companySection.getCompanies() instanceof ArrayList) {
+                    ArrayList<Company> array = (ArrayList<Company>) companySection.getCompanies();
                     for (Company k : array) {
                         stringBuilder.append(k.getTitle()).append(" ");
                         stringBuilder.append(k.getWebsite()).append("\n");
@@ -314,7 +327,7 @@ public class ResumeTestData {
                 }
             }
         }
-
+      //    System.out.println(kislin);
         System.out.printf(stringBuilder.toString());
     }
 }

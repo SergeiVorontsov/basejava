@@ -5,23 +5,16 @@ import java.util.Objects;
 public class TextSection extends AbstractSection {
     private String text;
 
-    @Override
-    public Object getItem() {
+    public TextSection() {
+        this.text = "";
+    }
+
+    public String getText() {
         return text;
     }
 
-    @Override
-    public void addItem(Object item) {
-        if (item instanceof String) {
-            this.text = (String) item;
-        } else {
-            throw new ClassCastException("The selected section cannot store this kind of data");
-        }
-    }
-
-    @Override
-    public void deleteItem() {
-            text = "";
+    public void setText(String text){
+        this.text = text;
     }
 
     @Override
