@@ -2,12 +2,23 @@ package com.basejava.webapp.model;
 
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
+import java.util.Objects;
 
 public class Period {
     private String title;
     private String description;
-    private LocalDate dateFrom;
-    private LocalDate dateTo;
+    private LocalDate startDate;
+    private LocalDate endDate;
+
+    public Period(String title, String description, LocalDate startDate, LocalDate endDate) {
+        Objects.requireNonNull(title, "title must not be null");
+        Objects.requireNonNull(startDate, "startDate must not be null");
+        Objects.requireNonNull(endDate, "endDate must not be null");
+        this.title = title;
+        this.description = description;
+        this.startDate = startDate;
+        this.endDate = endDate;
+    }
 
     public String getTitle() {
         return title;
@@ -25,20 +36,20 @@ public class Period {
         this.description = description;
     }
 
-    public LocalDate getDateFrom() {
-        return dateFrom;
+    public LocalDate getStartDate() {
+        return startDate;
     }
 
-    public void setDateFrom(LocalDate dateFrom) {
-        this.dateFrom = dateFrom;
+    public void setStartDate(LocalDate startDate) {
+        this.startDate = startDate;
     }
 
-    public LocalDate getDateTo() {
-        return dateTo;
+    public LocalDate getEndDate() {
+        return endDate;
     }
 
-    public void setDateTo(LocalDate dateTo) {
-        this.dateTo = dateTo;
+    public void setEndDate(LocalDate endDate) {
+        this.endDate = endDate;
     }
 
     @Override
@@ -50,16 +61,16 @@ public class Period {
 
         if (title != null ? !title.equals(period.title) : period.title != null) return false;
         if (description != null ? !description.equals(period.description) : period.description != null) return false;
-        if (dateFrom != null ? !dateFrom.equals(period.dateFrom) : period.dateFrom != null) return false;
-        return dateTo != null ? dateTo.equals(period.dateTo) : period.dateTo == null;
+        if (startDate != null ? !startDate.equals(period.startDate) : period.startDate != null) return false;
+        return endDate != null ? endDate.equals(period.endDate) : period.endDate == null;
     }
 
     @Override
     public int hashCode() {
         int result = title != null ? title.hashCode() : 0;
         result = 31 * result + (description != null ? description.hashCode() : 0);
-        result = 31 * result + (dateFrom != null ? dateFrom.hashCode() : 0);
-        result = 31 * result + (dateTo != null ? dateTo.hashCode() : 0);
+        result = 31 * result + (startDate != null ? startDate.hashCode() : 0);
+        result = 31 * result + (endDate != null ? endDate.hashCode() : 0);
         return result;
     }
 
@@ -68,9 +79,9 @@ public class Period {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
 
         return "\u001B[33m" +
-                dateFrom.format(formatter) +
+                startDate.format(formatter) +
                 "-" +
-                dateTo.format(formatter) +
+                endDate.format(formatter) +
                 "\u001B[0m" +
                 " " +
                 title +

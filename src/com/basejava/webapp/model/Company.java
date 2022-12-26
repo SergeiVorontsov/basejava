@@ -1,15 +1,28 @@
 package com.basejava.webapp.model;
 
-import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class Company {
     private String title;
     private String website;
-    private List<Period> periods = new ArrayList<>();
+    private List<Period> periods;
 
-    public Company() {
+    public Company(String title, String website, Period... periods) {
+        Objects.requireNonNull(title, "title must not be null");
+        Objects.requireNonNull(periods, "periods must not be null");
+        this.title = title;
+        this.website = website;
+        this.periods = Arrays.asList(periods);
+    }
 
+    public Company(String title, String website, List<Period> periods) {
+        Objects.requireNonNull(title, "title must not be null");
+        Objects.requireNonNull(periods, "periods must not be null");
+        this.title = title;
+        this.website = website;
+        this.periods = periods;
     }
 
     public String getTitle() {
@@ -43,9 +56,9 @@ public class Company {
 
         Company company = (Company) o;
 
-        if (title != null ? !title.equals(company.title) : company.title != null) return false;
-        if (website != null ? !website.equals(company.website) : company.website != null) return false;
-        return periods != null ? periods.equals(company.periods) : company.periods == null;
+        if (!title.equals(company.title)) return false;
+        if (!Objects.equals(website, company.website)) return false;
+        return periods.equals(company.periods);
     }
 
     @Override

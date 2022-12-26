@@ -2,19 +2,16 @@ package com.basejava.webapp.model;
 
 import java.util.Objects;
 
-public class TextSection extends AbstractSection {
-    private String text;
+public class TextSection extends Section {
+    private final String content;
 
-    public TextSection() {
-        this.text = "";
+    public TextSection(String content) {
+        Objects.requireNonNull(content, "content must not be null");
+        this.content = content;
     }
 
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text){
-        this.text = text;
+    public String getContent() {
+        return content;
     }
 
     @Override
@@ -24,16 +21,16 @@ public class TextSection extends AbstractSection {
 
         TextSection that = (TextSection) o;
 
-        return Objects.equals(text, that.text);
+        return content.equals(that.content);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hashCode(text);
+        return content.hashCode();
     }
 
     @Override
     public String toString() {
-        return text + '\n';
+        return content + '\n';
     }
 }

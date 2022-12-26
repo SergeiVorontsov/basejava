@@ -3,29 +3,12 @@ import com.basejava.webapp.model.*;
 import java.time.LocalDate;
 import java.time.Month;
 import java.util.ArrayList;
-import java.util.List;
 import java.util.Map;
 
-public class ResumeTestData {
-    public static void addContact(Resume resume, ContactType type, String value) {
-        resume.getContacts().get(type).setContact(value);
-    }
+import static com.basejava.webapp.util.DateUtil.of;
+import static com.basejava.webapp.util.ResumeUtil.*;
 
-    @SuppressWarnings("unchecked")
-    public static void addSection(Resume resume, SectionType type, Object value) {
-        Object section = resume.getSections().get(type);
-        if (section instanceof TextSection) {
-            ((TextSection) section).setText((String) value);
-        }
-        if (section instanceof ListSection) {
-            ((ListSection) section).getList().clear();
-            ((ListSection) section).getList().addAll((ArrayList<String>) value);
-        }
-        if (section instanceof CompanySection) {
-            ((CompanySection) section).getCompanies().clear();
-            ((CompanySection) section).getCompanies().addAll((ArrayList<Company>) value);
-        }
-    }
+public class ResumeTestData {
 
     public static void main(String[] args) {
         String email = "gkislin@yandex.ru";
@@ -74,236 +57,195 @@ public class ResumeTestData {
         addContact(kislin, ContactType.STACKOVERFLOW, stack);
         addContact(kislin, ContactType.WEB, web);
 
-        addSection(kislin, SectionType.OBJECTIVE, objective);
-        addSection(kislin, SectionType.OBJECTIVE, objective);
-        addSection(kislin, SectionType.PERSONAL, personal);
-        addSection(kislin, SectionType.ACHIEVEMENT, achievement);
-        addSection(kislin, SectionType.QUALIFICATIONS, qualification);
+        addText(kislin, SectionType.OBJECTIVE, objective);
+        addText(kislin, SectionType.PERSONAL, personal);
 
+        addList(kislin, SectionType.ACHIEVEMENT, achievement);
+        addList(kislin, SectionType.QUALIFICATIONS, qualification);
 
-        ArrayList<Company> experience = new ArrayList<>();
         {
-            Company company = new Company();
-            company.setTitle("Alcatel");
-            company.setWebsite("http://www.alcatel.ru/");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Инженер по аппаратному и программному тестированию");
-            period.setDescription("Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).");
-            period.setDateFrom(LocalDate.of(1997, Month.SEPTEMBER, 1));
-            period.setDateTo(LocalDate.of(2005, Month.JANUARY, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            experience.add(company);
+            String companyName = "Alcatel";
+            String website = "http://www.alcatel.ru/";
+            String title = "Инженер по аппаратному и программному тестированию";
+            String description = "Тестирование, отладка, внедрение ПО цифровой телефонной станции Alcatel 1000 S12 (CHILL, ASM).";
+            LocalDate startDate = of(1997, Month.SEPTEMBER);
+            LocalDate endDate = of(2005, Month.JANUARY);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("Siemens AG");
-            company.setWebsite("https://www.siemens.com/ru/ru/home.html");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Разработчик ПО");
-            period.setDescription("Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).");
-            period.setDateFrom(LocalDate.of(2005, Month.JANUARY, 1));
-            period.setDateTo(LocalDate.of(2007, Month.FEBRUARY, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            experience.add(company);
+            String companyName = "Siemens AG";
+            String website = "https://www.siemens.com/ru/ru/home.html";
+            String title = "Разработчик ПО";
+            String description = "Разработка информационной модели, проектирование интерфейсов, реализация и отладка ПО на мобильной IN платформе Siemens @vantage (Java, Unix).";
+            LocalDate startDate = of(2005, Month.JANUARY);
+            LocalDate endDate = of(2007, Month.FEBRUARY);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("Enkata");
-            company.setWebsite("http://enkata.com/");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Разработчик ПО");
-            period.setDescription("Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).");
-            period.setDateFrom(LocalDate.of(2007, Month.MARCH, 1));
-            period.setDateTo(LocalDate.of(2008, Month.JUNE, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            experience.add(company);
+            String companyName = "Enkata";
+            String website = "http://enkata.com/";
+            String title = "Разработчик ПО";
+            String description = "Реализация клиентской (Eclipse RCP) и серверной (JBoss 4.2, Hibernate 3.0, Tomcat, JMS) частей кластерного J2EE приложения (OLAP, Data mining).";
+            LocalDate startDate = of(2007, Month.MARCH);
+            LocalDate endDate = of(2008, Month.JUNE);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("Yota");
-            company.setWebsite("https://www.yota.ru/");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Ведущий специалист");
-            period.setDescription("Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)");
-            period.setDateFrom(LocalDate.of(2008, Month.JUNE, 1));
-            period.setDateTo(LocalDate.of(2010, Month.DECEMBER, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            experience.add(company);
+            String companyName = "Yota";
+            String website = "https://www.yota.ru/";
+            String title = "Ведущий специалист";
+            String description = "Дизайн и имплементация Java EE фреймворка для отдела \"Платежные Системы\" (GlassFish v2.1, v3, OC4J, EJB3, JAX-WS RI 2.1, Servlet 2.4, JSP, JMX, JMS, Maven2). Реализация администрирования, статистики и мониторинга фреймворка. Разработка online JMX клиента (Python/ Jython, Django, ExtJS)";
+            LocalDate startDate = of(2008, Month.JUNE);
+            LocalDate endDate = of(2010, Month.DECEMBER);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("Luxoft (Deutsche Bank)");
-            company.setWebsite("http://www.luxoft.ru/");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Ведущий программист");
-            period.setDescription("Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.");
-            period.setDateFrom(LocalDate.of(2010, Month.DECEMBER, 1));
-            period.setDateTo(LocalDate.of(2012, Month.APRIL, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            experience.add(company);
+            String companyName = "Luxoft (Deutsche Bank)";
+            String website = "http://www.luxoft.ru/";
+            String title = "Ведущий программист";
+            String description = "Участие в проекте Deutsche Bank CRM (WebLogic, Hibernate, Spring, Spring MVC, SmartGWT, GWT, Jasper, Oracle). Реализация клиентской и серверной части CRM. Реализация RIA-приложения для администрирования, мониторинга и анализа результатов в области алгоритмического трейдинга. JPA, Spring, Spring-MVC, GWT, ExtGWT (GXT), Highstock, Commet, HTML5.";
+            LocalDate startDate = of(2010, Month.DECEMBER);
+            LocalDate endDate = of(2012, Month.APRIL);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("RIT Center");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Java архитектор");
-            period.setDescription("Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python");
-            period.setDateFrom(LocalDate.of(2012, Month.APRIL, 1));
-            period.setDateTo(LocalDate.of(2014, Month.OCTOBER, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            experience.add(company);
+            String companyName = "RIT Center";
+            String website = null;
+            String title = "Java архитектор";
+            String description = "Организация процесса разработки системы ERP для разных окружений: релизная политика, версионирование, ведение CI (Jenkins), миграция базы (кастомизация Flyway), конфигурирование системы (pgBoucer, Nginx), AAA via SSO. Архитектура БД и серверной части системы. Разработка интергационных сервисов: CMIS, BPMN2, 1C (WebServices), сервисов общего назначения (почта, экспорт в pdf, doc, html). Интеграция Alfresco JLAN для online редактирование из браузера документов MS Office. Maven + plugin development, Ant, Apache Commons, Spring security, Spring MVC, Tomcat,WSO2, xcmis, OpenCmis, Bonita, Python scripting, Unix shell remote scripting via ssh tunnels, PL/Python";
+            LocalDate startDate = of(2012, Month.APRIL);
+            LocalDate endDate = of(2014, Month.OCTOBER);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("Wrike");
-            company.setWebsite("https://www.wrike.com/");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Старший разработчик (backend)");
-            period.setDescription("Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.");
-            period.setDateFrom(LocalDate.of(2014, Month.OCTOBER, 1));
-            period.setDateTo(LocalDate.of(2016, Month.JANUARY, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            experience.add(company);
+            String companyName = "Wrike";
+            String website = "https://www.wrike.com/";
+            String title = "Старший разработчик (backend)";
+            String description = "Проектирование и разработка онлайн платформы управления проектами Wrike (Java 8 API, Maven, Spring, MyBatis, Guava, Vaadin, PostgreSQL, Redis). Двухфакторная аутентификация, авторизация по OAuth1, OAuth2, JWT SSO.";
+            LocalDate startDate = of(2014, Month.OCTOBER);
+            LocalDate endDate = of(2016, Month.JANUARY);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("Java Online Projects");
-            company.setWebsite("http://javaops.ru/");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Автор проекта.");
-            period.setDescription("Создание, организация и проведение Java онлайн проектов и стажировок.");
-            period.setDateFrom(LocalDate.of(2013, Month.OCTOBER, 1));
-            period.setDateTo(LocalDate.now());
-            periods.add(period);
-            company.setPeriods(periods);
-            experience.add(company);
+            String companyName = "Java Online Projects";
+            String website = "http://javaops.ru/";
+            String title = "Автор проекта.";
+            String description = "Создание, организация и проведение Java онлайн проектов и стажировок.";
+            LocalDate startDate = of(2013, Month.OCTOBER);
+            LocalDate endDate = LocalDate.now();
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
+        /////////////////////////////////////////
+        {
+            String companyName = "Заочная физико-техническая школа при МФТИ";
+            String website = "https://mipt.ru/";
+            String title = "Закончил с отличием";
+            String description = null;
+            LocalDate startDate = of(1984, Month.SEPTEMBER);
+            LocalDate endDate = of(1987, Month.JUNE);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
+        }
+        {
+            String companyName = "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики";
+            String website = "http://www.ifmo.ru/";
+            String title = "Инженер (программист Fortran, C)";
+            String description = null;
+            LocalDate startDate = of(1987, Month.SEPTEMBER);
+            LocalDate endDate = of(1993, Month.JULY);
 
-        addSection(kislin, SectionType.EXPERIENCE, experience);
-
-        ArrayList<Company> education = new ArrayList<>();
-        {
-            Company company = new Company();
-            company.setTitle("Заочная физико-техническая школа при МФТИ");
-            company.setWebsite("https://mipt.ru/");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Закончил с отличием");
-            period.setDateFrom(LocalDate.of(1984, Month.SEPTEMBER, 1));
-            period.setDateTo(LocalDate.of(1987, Month.JUNE, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            education.add(company);
+            String title2 = "Аспирантура (программист С, С++)";
+            String description2 = null;
+            LocalDate startDate2 = of(1993, Month.SEPTEMBER);
+            LocalDate endDate2 = of(1996, Month.JULY);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate),
+                    new Period(title2, description2, startDate2, endDate2));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики");
-            company.setWebsite("http://www.ifmo.ru/");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Инженер (программист Fortran, C)");
-            period.setDateFrom(LocalDate.of(1987, Month.SEPTEMBER, 1));
-            period.setDateTo(LocalDate.of(1993, Month.JULY, 1));
-            periods.add(period);
-            Period period2 = new Period();
-            period2.setTitle("Аспирантура (программист С, С++)");
-            period2.setDateFrom(LocalDate.of(1993, Month.SEPTEMBER, 1));
-            period2.setDateTo(LocalDate.of(1996, Month.JULY, 1));
-            periods.add(period2);
-            company.setPeriods(periods);
-            education.add(company);
+            String companyName = "Alcatel";
+            String website = "http://www.alcatel.ru/";
+            String title = "6 месяцев обучения цифровым телефонным сетям (Москва)";
+            String description = null;
+            LocalDate startDate = of(1997, Month.SEPTEMBER);
+            LocalDate endDate = of(1998, Month.MARCH);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("Alcatel");
-            company.setWebsite("http://www.alcatel.ru/");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("6 месяцев обучения цифровым телефонным сетям (Москва)");
-            period.setDateFrom(LocalDate.of(1997, Month.SEPTEMBER, 1));
-            period.setDateTo(LocalDate.of(1998, Month.MARCH, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            experience.add(company);
+            String companyName = "Siemens AG";
+            String website = "http://www.siemens.ru/";
+            String title = "3 месяца обучения мобильным IN сетям (Берлин)";
+            String description = null;
+            LocalDate startDate = of(2005, Month.JANUARY);
+            LocalDate endDate = of(2005, Month.APRIL);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("Siemens AG");
-            company.setWebsite("http://www.siemens.ru/");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("3 месяца обучения мобильным IN сетям (Берлин)");
-            period.setDateFrom(LocalDate.of(2005, Month.JANUARY, 1));
-            period.setDateTo(LocalDate.of(2005, Month.APRIL, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            education.add(company);
+            String companyName = "Luxoft";
+            String website = "http://www.luxoft-training.ru/training/catalog/course.html?ID=22366";
+            String title = "Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.";
+            String description = null;
+            LocalDate startDate = of(2011, Month.MARCH);
+            LocalDate endDate = of(2011, Month.APRIL);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
-            Company company = new Company();
-            company.setTitle("Luxoft");
-            company.setWebsite("http://www.luxoft-training.ru/training/catalog/course.html?ID=22366");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("Курс 'Объектно-ориентированный анализ ИС. Концептуальное моделирование на UML.");
-            period.setDateFrom(LocalDate.of(2011, Month.MARCH, 1));
-            period.setDateTo(LocalDate.of(2011, Month.APRIL, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            education.add(company);
+            String companyName = "Coursera";
+            String website = "https://www.coursera.org/course/progfun";
+            String title = "'Functional Programming Principles in Scala' by Martin Odersky";
+            String description = null;
+            LocalDate startDate = of(2013, Month.MARCH);
+            LocalDate endDate = of(2013, Month.MAY);
+            Company company = new Company(companyName, website,
+                    new Period(title, description, startDate, endDate));
+            addCompany(kislin, company, SectionType.EXPERIENCE);
         }
-        {
-            Company company = new Company();
-            company.setTitle("Coursera");
-            company.setWebsite("https://www.coursera.org/course/progfun");
-            List<Period> periods = new ArrayList<>();
-            Period period = new Period();
-            period.setTitle("'Functional Programming Principles in Scala' by Martin Odersky");
-            period.setDateFrom(LocalDate.of(2013, Month.MARCH, 1));
-            period.setDateTo(LocalDate.of(2013, Month.MAY, 1));
-            periods.add(period);
-            company.setPeriods(periods);
-            education.add(company);
-        }
-        addSection(kislin, SectionType.EDUCATION, education);
-
 
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(kislin.getFullName()).append("\n");
-        for (Map.Entry<ContactType, Contact> contact : kislin.getContacts().entrySet()
+        for (Map.Entry<ContactType, String> contact : kislin.getContacts().entrySet()
         ) {
             stringBuilder.append(contact.getKey().getTitle()).append(": ");
-            stringBuilder.append(contact.getValue().getContact()).append("\n");
+            stringBuilder.append(contact.getValue()).append("\n");
         }
-        for (Map.Entry<SectionType, AbstractSection> section : kislin.getSections().
+        for (Map.Entry<SectionType, Section> section : kislin.getSections().
                 entrySet()
         ) {
-            AbstractSection currentSection = section.getValue();
+            Section currentSection = section.getValue();
             if (currentSection instanceof TextSection) {
                 stringBuilder.append(section.getKey().getTitle()).append(":\n");
                 TextSection textSection = (TextSection) currentSection;
-                stringBuilder.append(textSection.getText()).append("\n");
+                stringBuilder.append(textSection.getContent()).append("\n");
             }
             if (currentSection instanceof ListSection) {
                 stringBuilder.append(section.getKey().getTitle()).append(":\n");
                 ListSection listSection = (ListSection) currentSection;
-                if (listSection.getList() instanceof ArrayList) {
-                    ArrayList<String> array = (ArrayList<String>) listSection.getList();
+                if (listSection.getItems() instanceof ArrayList) {
+                    ArrayList<String> array = (ArrayList<String>) listSection.getItems();
                     for (String s : array) {
                         stringBuilder.append(s).append(":\n");
                     }
@@ -318,8 +260,8 @@ public class ResumeTestData {
                         stringBuilder.append(k.getTitle()).append(" ");
                         stringBuilder.append(k.getWebsite()).append("\n");
                         for (Period p : k.getPeriods()) {
-                            stringBuilder.append(p.getDateFrom()).append(" - ");
-                            stringBuilder.append(p.getDateTo()).append("  ");
+                            stringBuilder.append(p.getStartDate()).append(" - ");
+                            stringBuilder.append(p.getEndDate()).append("  ");
                             stringBuilder.append(p.getTitle()).append("\n");
                             stringBuilder.append(p.getDescription()).append("\n");
                         }
@@ -327,7 +269,7 @@ public class ResumeTestData {
                 }
             }
         }
-      //    System.out.println(kislin);
+        // System.out.println(kislin);
         System.out.printf(stringBuilder.toString());
     }
 }

@@ -1,6 +1,9 @@
 package com.basejava.webapp.model;
 
-import java.util.*;
+import java.util.EnumMap;
+import java.util.Map;
+import java.util.Objects;
+import java.util.UUID;
 
 /**
  * Initial resume class
@@ -9,12 +12,8 @@ public class Resume implements Comparable<Resume> {
 
     private final String uuid;
     private String fullName;
-    private final Map<ContactType, Contact> contacts = new EnumMap<>(ContactType.class);
-    private final Map<SectionType, AbstractSection> sections = new EnumMap<>(SectionType.class);
-
-    public Resume() {
-        this("");
-    }
+    private final Map<ContactType, String> contacts = new EnumMap<>(ContactType.class);
+    private final Map<SectionType, Section> sections = new EnumMap<>(SectionType.class);
 
     public Resume(String fullName) {
         this(UUID.randomUUID().toString(), fullName);
@@ -25,22 +24,6 @@ public class Resume implements Comparable<Resume> {
         Objects.requireNonNull(fullName, "fullName can`t be null");
         this.uuid = uuid;
         this.fullName = fullName;
-
-        for (ContactType type : ContactType.values()) {
-            contacts.put(type, new Contact());
-        }
-
-        for (SectionType type : SectionType.values()) {
-            if ((type == SectionType.QUALIFICATIONS) | (type == SectionType.ACHIEVEMENT)) {
-                sections.put(type, new ListSection());
-            }
-            if ((type == SectionType.OBJECTIVE) | (type == SectionType.PERSONAL)) {
-                sections.put(type, new TextSection());
-            }
-            if ((type == SectionType.EXPERIENCE) | (type == SectionType.EDUCATION)) {
-                sections.put(type, new CompanySection());
-            }
-        }
     }
 
     public String getUuid() {
@@ -55,12 +38,14 @@ public class Resume implements Comparable<Resume> {
         this.fullName = fullName;
     }
 
-    public Map<ContactType, Contact> getContacts() {
-        return Collections.unmodifiableMap(contacts);
+    public Map<ContactType, String> getContacts() {
+        return contacts;
+        //Collections.unmodifiableMap(contacts);
     }
 
-    public Map<SectionType, AbstractSection> getSections() {
-        return Collections.unmodifiableMap(sections);
+    public Map<SectionType, Section> getSections() {
+        return sections;
+        //Collections.unmodifiableMap(sections);
     }
 
     @Override
@@ -84,13 +69,13 @@ public class Resume implements Comparable<Resume> {
     @Override
     public String toString() {
         StringBuilder contactsResult = new StringBuilder();
-        for (Map.Entry<ContactType, Contact> entry : getContacts().entrySet()) {
+        for (Map.Entry<ContactType, String> entry : getContacts().entrySet()) {
             String key = entry.getKey().getTitle();
-            String value = entry.getValue().toString();
-            contactsResult.append("\u001B[32m").append(key).append(": ").append("\u001B[0m").append(value);
+            String value = entry.getValue();
+            contactsResult.append("\u001B[32m").append(key).append(": ").append("\u001B[0m").append(value).append('\n');
         }
         StringBuilder sectionResult = new StringBuilder();
-        for (Map.Entry<SectionType, AbstractSection> entry : getSections().entrySet()) {
+        for (Map.Entry<SectionType, Section> entry : getSections().entrySet()) {
             String key = entry.getKey().getTitle();
             String value = entry.getValue().toString();
             sectionResult.append("\u001B[32m").append(key).append(": ").append("\u001B[0m").append('\n').append(value);

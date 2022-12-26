@@ -1,13 +1,18 @@
 package com.basejava.webapp.model;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 
-public class ListSection extends AbstractSection {
-    private final List<String> strings = new ArrayList<>();
+public class ListSection extends Section {
+    private final List<String> items;
 
-    public List<String> getList() {
-        return strings;
+    public ListSection(List<String> items) {
+        Objects.requireNonNull(items, "items must not be null");
+        this.items = items;
+    }
+
+    public List<String> getItems() {
+        return items;
     }
 
     @Override
@@ -15,20 +20,20 @@ public class ListSection extends AbstractSection {
         if (this == o) return true;
         if (o == null || getClass() != o.getClass()) return false;
 
-        ListSection section = (ListSection) o;
+        ListSection that = (ListSection) o;
 
-        return strings.equals(section.strings);
+        return items.equals(that.items);
     }
 
     @Override
     public int hashCode() {
-        return strings.hashCode();
+        return items.hashCode();
     }
 
     @Override
     public String toString() {
         StringBuilder result = new StringBuilder();
-        for (String string : strings) {
+        for (String string : items) {
             result.append('\u2022').append(string).append('\n');
         }
         return result.toString();
