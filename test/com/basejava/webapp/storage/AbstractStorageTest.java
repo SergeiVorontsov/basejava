@@ -12,6 +12,8 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.basejava.webapp.ResumeTestData.createResume;
+
 public abstract class AbstractStorageTest {
     public static final String UUID_1 = "uuid1";
     public static final String UUID_2 = "uuid2";
@@ -21,10 +23,10 @@ public abstract class AbstractStorageTest {
     public static final String FULLNAME_2 = "Jack";
     public static final String FULLNAME_3 = "Tom";
     public static final String FULLNAME_4 = "Mary";
-    public static final Resume RESUME_1 = new Resume(UUID_1, FULLNAME_1);
-    public static final Resume RESUME_2 = new Resume(UUID_2, FULLNAME_2);
-    public static final Resume RESUME_3 = new Resume(UUID_3, FULLNAME_3);
-    public static final Resume RESUME_4 = new Resume(UUID_4, FULLNAME_4);
+    public static final Resume RESUME_1 = createResume(UUID_1, FULLNAME_1);
+    public static final Resume RESUME_2 = createResume(UUID_2, FULLNAME_2);
+    public static final Resume RESUME_3 = createResume(UUID_3, FULLNAME_3);
+    public static final Resume RESUME_4 = createResume(UUID_4, FULLNAME_4);
     public static final String UUID_NOT_EXIST = "dummy";
     protected final Storage storage;
 
@@ -67,15 +69,15 @@ public abstract class AbstractStorageTest {
     }
 
     @Test
-    public void testUpdate() throws NotExistStorageException {
+    public void testUpdate() throws StorageException {
         Resume tempResume = new Resume(UUID_1, FULLNAME_4);
         storage.update(tempResume);
         Assert.assertSame(tempResume, storage.get(UUID_1));
     }
 
     @Test(expected = NotExistStorageException.class)
-    public void testUpdateNotExist() throws NotExistStorageException {
-        storage.update(new Resume());
+    public void testUpdateNotExist() throws StorageException {
+        storage.update(new Resume("Random Fullname"));
     }
 
     @Test

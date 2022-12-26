@@ -1,3 +1,5 @@
+package com.basejava.webapp;
+
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
 import com.basejava.webapp.storage.MapResumeStorage;

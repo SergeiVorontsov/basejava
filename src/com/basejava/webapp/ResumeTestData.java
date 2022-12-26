@@ -1,3 +1,5 @@
+package com.basejava.webapp;
+
 import com.basejava.webapp.model.*;
 
 import java.time.LocalDate;
@@ -11,6 +13,59 @@ import static com.basejava.webapp.util.ResumeUtil.*;
 public class ResumeTestData {
 
     public static void main(String[] args) {
+        Resume kislin = createResume("123423","ГригорийКислин");
+        // System.out.println(kislin);
+        StringBuilder stringBuilder = new StringBuilder();
+        stringBuilder.append(kislin.getFullName()).append("\n");
+        for (Map.Entry<ContactType, String> contact : kislin.getContacts().entrySet()
+        ) {
+            stringBuilder.append(contact.getKey().getTitle()).append(": ");
+            stringBuilder.append(contact.getValue()).append("\n");
+        }
+        for (Map.Entry<SectionType, Section> section : kislin.getSections().
+                entrySet()
+        ) {
+            Section currentSection = section.getValue();
+            if (currentSection instanceof TextSection) {
+                stringBuilder.append(section.getKey().getTitle()).append(":\n");
+                TextSection textSection = (TextSection) currentSection;
+                stringBuilder.append(textSection.getContent()).append("\n");
+            }
+            if (currentSection instanceof ListSection) {
+                stringBuilder.append(section.getKey().getTitle()).append(":\n");
+                ListSection listSection = (ListSection) currentSection;
+                if (listSection.getItems() instanceof ArrayList) {
+                    ArrayList<String> array = (ArrayList<String>) listSection.getItems();
+                    for (String s : array) {
+                        stringBuilder.append(s).append(":\n");
+                    }
+                }
+            }
+            if (currentSection instanceof CompanySection) {
+                stringBuilder.append((section.getKey().getTitle())).append(":\n");
+                CompanySection companySection = (CompanySection) currentSection;
+                if (companySection.getCompanies() instanceof ArrayList) {
+                    ArrayList<Company> array = (ArrayList<Company>) companySection.getCompanies();
+                    for (Company k : array) {
+                        stringBuilder.append(k.getTitle()).append(" ");
+                        stringBuilder.append(k.getWebsite()).append("\n");
+                        for (Period p : k.getPeriods()) {
+                            stringBuilder.append(p.getStartDate()).append(" - ");
+                            stringBuilder.append(p.getEndDate()).append("  ");
+                            stringBuilder.append(p.getTitle()).append("\n");
+                            stringBuilder.append(p.getDescription()).append("\n");
+                        }
+                    }
+                }
+            }
+        }
+        System.out.printf(stringBuilder.toString());
+
+    }
+
+    public static Resume createResume(String uuid, String fullName) {
+        Resume kislin = new Resume(uuid, fullName);
+
         String email = "gkislin@yandex.ru";
         String tel = "+7(921) 855-0482";
         String skype = "grigory.kislin";
@@ -46,8 +101,6 @@ public class ResumeTestData {
         qualification.add("администрирование Hudson/Jenkins, Ant + custom task, SoapUI, JPublisher, Flyway, Nagios, iReport, OpenCmis, Bonita, pgBouncer");
         qualification.add("Отличное знание и опыт применения концепций ООП, SOA, шаблонов проектрирования, архитектурных шаблонов, UML, функционального программирования");
         qualification.add("Родной русский, английский \"upper intermediate\"");
-
-        Resume kislin = new Resume("Кислин Григорий");
 
         addContact(kislin, ContactType.EMAIL, email);
         addContact(kislin, ContactType.PHONE, tel);
@@ -224,52 +277,6 @@ public class ResumeTestData {
                     new Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
-
-        StringBuilder stringBuilder = new StringBuilder();
-        stringBuilder.append(kislin.getFullName()).append("\n");
-        for (Map.Entry<ContactType, String> contact : kislin.getContacts().entrySet()
-        ) {
-            stringBuilder.append(contact.getKey().getTitle()).append(": ");
-            stringBuilder.append(contact.getValue()).append("\n");
-        }
-        for (Map.Entry<SectionType, Section> section : kislin.getSections().
-                entrySet()
-        ) {
-            Section currentSection = section.getValue();
-            if (currentSection instanceof TextSection) {
-                stringBuilder.append(section.getKey().getTitle()).append(":\n");
-                TextSection textSection = (TextSection) currentSection;
-                stringBuilder.append(textSection.getContent()).append("\n");
-            }
-            if (currentSection instanceof ListSection) {
-                stringBuilder.append(section.getKey().getTitle()).append(":\n");
-                ListSection listSection = (ListSection) currentSection;
-                if (listSection.getItems() instanceof ArrayList) {
-                    ArrayList<String> array = (ArrayList<String>) listSection.getItems();
-                    for (String s : array) {
-                        stringBuilder.append(s).append(":\n");
-                    }
-                }
-            }
-            if (currentSection instanceof CompanySection) {
-                stringBuilder.append((section.getKey().getTitle())).append(":\n");
-                CompanySection companySection = (CompanySection) currentSection;
-                if (companySection.getCompanies() instanceof ArrayList) {
-                    ArrayList<Company> array = (ArrayList<Company>) companySection.getCompanies();
-                    for (Company k : array) {
-                        stringBuilder.append(k.getTitle()).append(" ");
-                        stringBuilder.append(k.getWebsite()).append("\n");
-                        for (Period p : k.getPeriods()) {
-                            stringBuilder.append(p.getStartDate()).append(" - ");
-                            stringBuilder.append(p.getEndDate()).append("  ");
-                            stringBuilder.append(p.getTitle()).append("\n");
-                            stringBuilder.append(p.getDescription()).append("\n");
-                        }
-                    }
-                }
-            }
-        }
-        // System.out.println(kislin);
-        System.out.printf(stringBuilder.toString());
+        return kislin;
     }
 }

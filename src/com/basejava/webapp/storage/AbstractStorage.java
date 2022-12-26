@@ -18,7 +18,7 @@ public abstract class AbstractStorage<T> implements Storage {
 
 
     @Override
-    public void update(Resume resume) throws NotExistStorageException {
+    public void update(Resume resume) throws StorageException {
         LOG.info("Update " + resume);
         setResume(resume, getExistingSearchKey(resume.getUuid()));
     }
@@ -76,7 +76,7 @@ public abstract class AbstractStorage<T> implements Storage {
 
     protected abstract void removeResume(T searchKey);
 
-    protected abstract void setResume(Resume resume, T searchKey);
+    protected abstract void setResume(Resume resume, T searchKey) throws StorageException;
 
     protected abstract Resume getResume(T searchKey);
 

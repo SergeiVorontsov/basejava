@@ -14,7 +14,7 @@ public interface Storage {
 
     List<Resume> getAllSorted();
 
-    void update(Resume resume) throws NotExistStorageException;
+    void update(Resume resume) throws StorageException;
 
     void save(Resume resume) throws StorageException;
 
