@@ -20,19 +20,19 @@ public abstract class AbstractStorage<T> implements Storage {
     @Override
     public void update(Resume resume) throws StorageException {
         LOG.info("Update " + resume);
-        setResume(resume, getExistingSearchKey(resume.getUuid()));
+        doUpdate(resume, getExistingSearchKey(resume.getUuid()));
     }
 
     @Override
     public void save(Resume resume) throws StorageException {
         LOG.info("Save " + resume);
-        insertResume(resume, getNotExistingSearchKey(resume.getUuid()));
+        doSave(resume, getNotExistingSearchKey(resume.getUuid()));
     }
 
     @Override
     public void delete(String uuid) throws NotExistStorageException {
         LOG.info("Delete " + uuid);
-        removeResume(getExistingSearchKey(uuid));
+        doDelete(getExistingSearchKey(uuid));
     }
 
     @Override
@@ -61,7 +61,7 @@ public abstract class AbstractStorage<T> implements Storage {
 
     public List<Resume> getAllSorted() {
         LOG.info("getAllSorted");
-        List<Resume> list = getCopyStorageList();
+        List<Resume> list = doCopyAll();
         list.sort(RESUME_COMPARATOR);
         return list;
     }
@@ -70,13 +70,13 @@ public abstract class AbstractStorage<T> implements Storage {
 
     public abstract void clear();
 
-    protected abstract List<Resume> getCopyStorageList();
+    protected abstract List<Resume> doCopyAll();
 
-    protected abstract void insertResume(Resume resume, T searchKey) throws StorageException;
+    protected abstract void doSave(Resume resume, T searchKey) throws StorageException;
 
-    protected abstract void removeResume(T searchKey);
+    protected abstract void doDelete(T searchKey);
 
-    protected abstract void setResume(Resume resume, T searchKey) throws StorageException;
+    protected abstract void doUpdate(Resume resume, T searchKey) throws StorageException;
 
     protected abstract Resume getResume(T searchKey);
 

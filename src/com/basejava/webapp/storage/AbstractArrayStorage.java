@@ -24,17 +24,17 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    public List<Resume> getCopyStorageList() {
+    public List<Resume> doCopyAll() {
         return Arrays.asList(Arrays.copyOf(storage, countResumes));
     }
 
     @Override
-    protected void setResume(Resume resume, Integer searchKey) {
+    protected void doUpdate(Resume resume, Integer searchKey) {
         storage[searchKey] = resume;
     }
 
     @Override
-    protected void insertResume(Resume resume, Integer searchKey) throws StorageException {
+    protected void doSave(Resume resume, Integer searchKey) throws StorageException {
         if (STORAGE_LIMIT == countResumes) {
             throw new StorageException("Resume database is full", resume.getUuid());
         } else {
@@ -44,7 +44,7 @@ public abstract class AbstractArrayStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    protected void removeResume(Integer searchKey) {
+    protected void doDelete(Integer searchKey) {
         removeResumeInArray(searchKey);
         storage[countResumes - 1] = null;
         countResumes--;
