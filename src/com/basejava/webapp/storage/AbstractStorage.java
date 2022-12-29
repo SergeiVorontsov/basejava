@@ -38,7 +38,7 @@ public abstract class AbstractStorage<T> implements Storage {
     @Override
     public Resume get(String uuid) throws NotExistStorageException {
         LOG.info("Get " + uuid);
-        return getResume(getExistingSearchKey(uuid));
+        return doGet(getExistingSearchKey(uuid));
     }
 
     private T getExistingSearchKey(String uuid) throws NotExistStorageException {
@@ -78,7 +78,7 @@ public abstract class AbstractStorage<T> implements Storage {
 
     protected abstract void doUpdate(Resume resume, T searchKey) throws StorageException;
 
-    protected abstract Resume getResume(T searchKey);
+    protected abstract Resume doGet(T searchKey);
 
     protected abstract T getSearchKey(String uuid);
 

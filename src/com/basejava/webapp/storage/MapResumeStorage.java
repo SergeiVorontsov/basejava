@@ -36,7 +36,7 @@ public class MapResumeStorage extends AbstractStorage<Resume> {
     }
 
     @Override
-    public Resume getResume(Resume searchKey) {
+    public Resume doGet(Resume searchKey) {
         return searchKey;
     }
 

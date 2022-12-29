@@ -34,7 +34,7 @@ public class ListStorage extends AbstractStorage<Integer> {
     }
 
     @Override
-    public Resume getResume(Integer searchKey) {
+    public Resume doGet(Integer searchKey) {
         return storage.get(searchKey);
     }
 
