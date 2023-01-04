@@ -32,7 +32,7 @@ public class ResumeUtil {
         }
     }
 
-    public static void addList(Resume resume, SectionType type, List<String> items) {
+    public static void addListSection(Resume resume, SectionType type, List<String> items) {
         if ((type == SectionType.ACHIEVEMENT) | (type == SectionType.QUALIFICATIONS)) {
             ListSection temp = (ListSection) resume.getSections().get(type);
             if (temp == null) {
@@ -49,7 +49,7 @@ public class ResumeUtil {
         }
     }
 
-    public static void addText(Resume resume, SectionType type, String text) {
+    public static void addTextSection(Resume resume, SectionType type, String text) {
         if ((type == SectionType.OBJECTIVE) | (type == SectionType.PERSONAL)) {
             TextSection temp = (TextSection) resume.getSections().get(type);
             if (temp == null) {

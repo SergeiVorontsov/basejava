@@ -1,6 +1,5 @@
 package com.basejava.webapp.storage;
 
-
 import org.junit.runner.RunWith;
 import org.junit.runners.Suite;
 
@@ -10,7 +9,9 @@ import org.junit.runners.Suite;
         SortedArrayStorageTest.class,
         ListStorageTest.class,
         MapUuidStorageTest.class,
-        MapResumeStorageTest.class
-} )
+        MapResumeStorageTest.class,
+        ObjectStreamPathStorageTest.class,
+        ObjectStreamStorageTest.class
+})
 public class AllStorageTest {
 }

@@ -1,14 +1,22 @@
 package com.basejava.webapp.model;
 
+import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
 
 public class CompanySection extends Section {
+    private static final long serialVersionUID = 1L;
+
     private final List<Company> companies;
 
     public CompanySection(List<Company> companies) {
         Objects.requireNonNull(companies, "companies must not be null");
         this.companies = companies;
+    }
+
+    public CompanySection(Company... companies) {
+        Objects.requireNonNull(companies, "companies must not be null");
+        this.companies = Arrays.asList(companies);
     }
 
     public List<Company> getCompanies() {

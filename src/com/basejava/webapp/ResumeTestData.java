@@ -13,7 +13,7 @@ import static com.basejava.webapp.util.ResumeUtil.*;
 public class ResumeTestData {
 
     public static void main(String[] args) {
-        Resume kislin = createResume("123423","ГригорийКислин");
+        Resume kislin = createResume("123423", "Григорий Кислин");
         // System.out.println(kislin);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(kislin.getFullName()).append("\n");
@@ -49,7 +49,7 @@ public class ResumeTestData {
                     for (Company k : array) {
                         stringBuilder.append(k.getTitle()).append(" ");
                         stringBuilder.append(k.getWebsite()).append("\n");
-                        for (Period p : k.getPeriods()) {
+                        for (Company.Period p : k.getPeriods()) {
                             stringBuilder.append(p.getStartDate()).append(" - ");
                             stringBuilder.append(p.getEndDate()).append("  ");
                             stringBuilder.append(p.getTitle()).append("\n");
@@ -110,11 +110,11 @@ public class ResumeTestData {
         addContact(kislin, ContactType.STACKOVERFLOW, stack);
         addContact(kislin, ContactType.WEB, web);
 
-        addText(kislin, SectionType.OBJECTIVE, objective);
-        addText(kislin, SectionType.PERSONAL, personal);
+        addTextSection(kislin, SectionType.OBJECTIVE, objective);
+        addTextSection(kislin, SectionType.PERSONAL, personal);
 
-        addList(kislin, SectionType.ACHIEVEMENT, achievement);
-        addList(kislin, SectionType.QUALIFICATIONS, qualification);
+        addListSection(kislin, SectionType.ACHIEVEMENT, achievement);
+        addListSection(kislin, SectionType.QUALIFICATIONS, qualification);
 
         {
             String companyName = "Alcatel";
@@ -124,7 +124,7 @@ public class ResumeTestData {
             LocalDate startDate = of(1997, Month.SEPTEMBER);
             LocalDate endDate = of(2005, Month.JANUARY);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -135,7 +135,7 @@ public class ResumeTestData {
             LocalDate startDate = of(2005, Month.JANUARY);
             LocalDate endDate = of(2007, Month.FEBRUARY);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -146,7 +146,7 @@ public class ResumeTestData {
             LocalDate startDate = of(2007, Month.MARCH);
             LocalDate endDate = of(2008, Month.JUNE);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -157,7 +157,7 @@ public class ResumeTestData {
             LocalDate startDate = of(2008, Month.JUNE);
             LocalDate endDate = of(2010, Month.DECEMBER);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -168,7 +168,7 @@ public class ResumeTestData {
             LocalDate startDate = of(2010, Month.DECEMBER);
             LocalDate endDate = of(2012, Month.APRIL);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -179,7 +179,7 @@ public class ResumeTestData {
             LocalDate startDate = of(2012, Month.APRIL);
             LocalDate endDate = of(2014, Month.OCTOBER);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -190,7 +190,7 @@ public class ResumeTestData {
             LocalDate startDate = of(2014, Month.OCTOBER);
             LocalDate endDate = of(2016, Month.JANUARY);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -201,10 +201,9 @@ public class ResumeTestData {
             LocalDate startDate = of(2013, Month.OCTOBER);
             LocalDate endDate = LocalDate.now();
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
-        /////////////////////////////////////////
         {
             String companyName = "Заочная физико-техническая школа при МФТИ";
             String website = "https://mipt.ru/";
@@ -213,7 +212,7 @@ public class ResumeTestData {
             LocalDate startDate = of(1984, Month.SEPTEMBER);
             LocalDate endDate = of(1987, Month.JUNE);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -229,8 +228,8 @@ public class ResumeTestData {
             LocalDate startDate2 = of(1993, Month.SEPTEMBER);
             LocalDate endDate2 = of(1996, Month.JULY);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate),
-                    new Period(title2, description2, startDate2, endDate2));
+                    new Company.Period(title, description, startDate, endDate),
+                    new Company.Period(title2, description2, startDate2, endDate2));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -241,7 +240,7 @@ public class ResumeTestData {
             LocalDate startDate = of(1997, Month.SEPTEMBER);
             LocalDate endDate = of(1998, Month.MARCH);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -252,7 +251,7 @@ public class ResumeTestData {
             LocalDate startDate = of(2005, Month.JANUARY);
             LocalDate endDate = of(2005, Month.APRIL);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -263,7 +262,7 @@ public class ResumeTestData {
             LocalDate startDate = of(2011, Month.MARCH);
             LocalDate endDate = of(2011, Month.APRIL);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         {
@@ -274,7 +273,7 @@ public class ResumeTestData {
             LocalDate startDate = of(2013, Month.MARCH);
             LocalDate endDate = of(2013, Month.MAY);
             Company company = new Company(companyName, website,
-                    new Period(title, description, startDate, endDate));
+                    new Company.Period(title, description, startDate, endDate));
             addCompany(kislin, company, SectionType.EXPERIENCE);
         }
         return kislin;
