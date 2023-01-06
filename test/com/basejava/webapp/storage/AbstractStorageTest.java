@@ -3,7 +3,7 @@ package com.basejava.webapp.storage;
 import com.basejava.webapp.exception.ExistStorageException;
 import com.basejava.webapp.exception.NotExistStorageException;
 import com.basejava.webapp.exception.StorageException;
-import com.basejava.webapp.model.*;
+import com.basejava.webapp.model.Resume;
 import org.junit.Assert;
 import org.junit.Before;
 import org.junit.Test;
@@ -13,6 +13,7 @@ import java.util.Arrays;
 import java.util.Collections;
 import java.util.List;
 
+import static com.basejava.webapp.ResumeTestData.*;
 import static org.junit.Assert.assertEquals;
 
 public abstract class AbstractStorageTest {
@@ -33,34 +34,10 @@ public abstract class AbstractStorageTest {
     public static final String UUID_NOT_EXIST = "dummy";
 
     static {
-        RESUME_1 = new Resume(UUID_1, FULLNAME_1);
-        RESUME_1.setContact(ContactType.PHONE, "777-77-77");
-        RESUME_1.setContact(ContactType.EMAIL, "info@gmail.com");
-        RESUME_1.setSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
-        RESUME_1.setSection(SectionType.PERSONAL, new TextSection("Objective1"));
-        RESUME_1.setSection(SectionType.ACHIEVEMENT, new ListSection("Achievement1", "Achievement2", "Achievement3"));
-        RESUME_1.setSection(SectionType.EXPERIENCE, new CompanySection(
-                new Company("Company Name", "www.site.com",
-                        new Company.Period("Position", "Description", "05.2020", "06.2020"),
-                        new Company.Period("Position1", "Description1", "05.2021", "06.2021"),
-                        new Company.Period("Position2", "Description2", "05.2022")
-                ))
-        );
-        RESUME_2 = new Resume(UUID_2, FULLNAME_2);
-        RESUME_2.setContact(ContactType.PHONE, "777-77-78");
-        RESUME_2.setContact(ContactType.EMAIL, "mail@gmail.com");
-        RESUME_2.setSection(SectionType.OBJECTIVE, new TextSection("Objective2"));
-        RESUME_2.setSection(SectionType.PERSONAL, new TextSection("Objective2"));
-        RESUME_2.setSection(SectionType.ACHIEVEMENT, new ListSection("Achievement2.1", "Achievement2.2", "Achievement2.3"));
-        RESUME_2.setSection(SectionType.EXPERIENCE, new CompanySection(
-                new Company("Company Name2", "www.site2.com",
-                        new Company.Period("Position1", "Description1", "04.2020", "07.2020"),
-                        new Company.Period("Position2.1", "Description2.1", "04.2021", "07.2021"),
-                        new Company.Period("Position3.2", "Description3.2", "04.2022", "07.2022")
-                ))
-        );
-        RESUME_3 = new Resume(UUID_3, FULLNAME_3);
-        RESUME_4 = new Resume(UUID_4, FULLNAME_4);
+        RESUME_1 = fillResume1(UUID_1, FULLNAME_1);
+        RESUME_2 = fillResume2(UUID_2, FULLNAME_2);
+        RESUME_3 = fillResume3(UUID_3, FULLNAME_3);
+        RESUME_4 = fillResume4(UUID_4, FULLNAME_4);
     }
 
     public AbstractStorageTest(Storage storage) {
