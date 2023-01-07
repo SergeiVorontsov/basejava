@@ -2,6 +2,7 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.storage.SerializeStrategy.Serializer;
 
 import java.io.BufferedInputStream;
 import java.io.BufferedOutputStream;
@@ -53,10 +54,10 @@ public class PathStorage extends AbstractStorage<Path> {
     protected void doSave(Resume resume, Path path) throws StorageException {
         try {
             Files.createFile(path);
-            this.serializer.doWrite(resume, new BufferedOutputStream(Files.newOutputStream(path)));
         } catch (IOException e) {
             throw new StorageException("Path write error" + resume.getUuid(), path.toString(), e);
         }
+        doUpdate(resume,path);
     }
 
     @Override
@@ -88,7 +89,7 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     protected Path getSearchKey(String path) {
-        return Paths.get(directory.toString(), path);
+        return directory.resolve(path);
     }
 
     @Override

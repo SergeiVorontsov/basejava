@@ -2,6 +2,7 @@ package com.basejava.webapp.storage;
 
 import com.basejava.webapp.exception.StorageException;
 import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.storage.SerializeStrategy.Serializer;
 
 import java.io.*;
 import java.util.ArrayList;
@@ -53,10 +54,10 @@ public class FileStorage extends AbstractStorage<File> {
     protected void doSave(Resume resume, File file) throws StorageException {
         try {
             file.createNewFile();
-            this.serializer.doWrite(resume, new BufferedOutputStream(new FileOutputStream(file)));
         } catch (IOException e) {
             throw new StorageException("Couldn't create file" + file.getAbsolutePath(), file.getName(), e);
         }
+        doUpdate(resume,file);
     }
 
     @Override
