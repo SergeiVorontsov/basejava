@@ -65,11 +65,11 @@ public class DataStreamSerializer implements Serializer {
                     dos.writeInt(experience.getCompanies().size());
                     for (Company company : experience.getCompanies()) {
                         dos.writeUTF(company.getTitle());
-                        dos.writeUTF(company.getWebsite());
+                        dos.writeUTF(setNullParam(company.getWebsite()));
                         dos.writeInt(company.getPeriods().size());
                         for (Company.Period period : company.getPeriods()) {
                             dos.writeUTF(period.getTitle());
-                            dos.writeUTF(period.getDescription());
+                            dos.writeUTF(setNullParam(period.getDescription()));
                             dos.writeUTF(period.getStartDate().toString());
                             dos.writeUTF(period.getEndDate().toString());
                         }
@@ -89,25 +89,19 @@ public class DataStreamSerializer implements Serializer {
     private void readSections(DataInputStream dis, Resume resume) throws IOException {
         int sizeSections = dis.readInt();
         for (int i = 0; i < sizeSections; i++) {
-            String sectionType = dis.readUTF();
+            SectionType sectionType = SectionType.valueOf(dis.readUTF());
             switch (sectionType) {
-                case "OBJECTIVE":
-                    resume.setSection(SectionType.OBJECTIVE, new TextSection(dis.readUTF()));
+                case OBJECTIVE:
+                case PERSONAL:
+                    resume.setSection(sectionType, new TextSection(dis.readUTF()));
                     break;
-                case "PERSONAL":
-                    resume.setSection(SectionType.PERSONAL, new TextSection(dis.readUTF()));
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    resume.setSection(sectionType, new ListSection(getStrings(dis)));
                     break;
-                case "ACHIEVEMENT":
-                    resume.setSection(SectionType.ACHIEVEMENT, new ListSection(getStrings(dis)));
-                    break;
-                case "QUALIFICATIONS":
-                    resume.setSection(SectionType.QUALIFICATIONS, new ListSection(getStrings(dis)));
-                    break;
-                case "EXPERIENCE":
-                    resume.setSection(SectionType.EXPERIENCE, new CompanySection(getCompanies(dis)));
-                    break;
-                case "EDUCATION":
-                    resume.setSection(SectionType.EDUCATION, new CompanySection(getCompanies(dis)));
+                case EXPERIENCE:
+                case EDUCATION:
+                    resume.setSection(sectionType, new CompanySection(getCompanies(dis)));
                     break;
             }
         }
@@ -126,15 +120,30 @@ public class DataStreamSerializer implements Serializer {
         int sizeCompanies = dis.readInt();
         List<Company> items = new ArrayList<>();
         for (int k = 0; k < sizeCompanies; k++) {
-            Company company = new Company(dis.readUTF(), dis.readUTF());
+            Company company = new Company(dis.readUTF(), getNullParam(dis));
             int sizePeriods = dis.readInt();
             List<Company.Period> periods = new ArrayList<>();
             for (int j = 0; j < sizePeriods; j++) {
-                periods.add(new Company.Period(dis.readUTF(), dis.readUTF(), dis.readUTF(), dis.readUTF()));
+                periods.add(new Company.Period(dis.readUTF(), getNullParam(dis), dis.readUTF(), dis.readUTF()));
             }
             company.setPeriods(periods);
             items.add(company);
         }
         return items;
+    }
+
+    private String getNullParam(DataInputStream dis) throws IOException {
+        String param = dis.readUTF();
+        if (param.equals("null")) {
+            return null;
+        }
+        return param;
+    }
+
+    private String setNullParam(String param) {
+        if (param == null) {
+            return "null";
+        }
+        return param;
     }
 }
