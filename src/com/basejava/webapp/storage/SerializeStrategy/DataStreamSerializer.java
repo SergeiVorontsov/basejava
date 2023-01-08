@@ -65,11 +65,11 @@ public class DataStreamSerializer implements Serializer {
                     dos.writeInt(experience.getCompanies().size());
                     for (Company company : experience.getCompanies()) {
                         dos.writeUTF(company.getTitle());
-                        dos.writeUTF(setNullParam(company.getWebsite()));
+                        dos.writeUTF(checkNullParam(company.getWebsite()));
                         dos.writeInt(company.getPeriods().size());
                         for (Company.Period period : company.getPeriods()) {
                             dos.writeUTF(period.getTitle());
-                            dos.writeUTF(setNullParam(period.getDescription()));
+                            dos.writeUTF(checkNullParam(period.getDescription()));
                             dos.writeUTF(period.getStartDate().toString());
                             dos.writeUTF(period.getEndDate().toString());
                         }
@@ -120,11 +120,11 @@ public class DataStreamSerializer implements Serializer {
         int sizeCompanies = dis.readInt();
         List<Company> items = new ArrayList<>();
         for (int k = 0; k < sizeCompanies; k++) {
-            Company company = new Company(dis.readUTF(), getNullParam(dis));
+            Company company = new Company(dis.readUTF(), checkNullParam(dis));
             int sizePeriods = dis.readInt();
             List<Company.Period> periods = new ArrayList<>();
             for (int j = 0; j < sizePeriods; j++) {
-                periods.add(new Company.Period(dis.readUTF(), getNullParam(dis), dis.readUTF(), dis.readUTF()));
+                periods.add(new Company.Period(dis.readUTF(), checkNullParam(dis), dis.readUTF(), dis.readUTF()));
             }
             company.setPeriods(periods);
             items.add(company);
@@ -132,7 +132,7 @@ public class DataStreamSerializer implements Serializer {
         return items;
     }
 
-    private String getNullParam(DataInputStream dis) throws IOException {
+    private String checkNullParam(DataInputStream dis) throws IOException {
         String param = dis.readUTF();
         if (param.equals("null")) {
             return null;
@@ -140,7 +140,7 @@ public class DataStreamSerializer implements Serializer {
         return param;
     }
 
-    private String setNullParam(String param) {
+    private String checkNullParam(String param) {
         if (param == null) {
             return "null";
         }
