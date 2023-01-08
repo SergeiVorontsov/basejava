@@ -30,6 +30,15 @@ public class DataStreamSerializer implements Serializer {
         }
     }
 
+    private void writeContacts(Resume resume, DataOutputStream dos) throws IOException {
+        Map<ContactType, String> contacts = resume.getContacts();
+        dos.writeInt(contacts.size());
+        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+            dos.writeUTF(entry.getKey().name());
+            dos.writeUTF(entry.getValue());
+        }
+    }
+
     private void writeSections(Resume resume, DataOutputStream dos) throws IOException {
         Map<SectionType, Section> sections = resume.getSections();
         dos.writeInt(sections.size());
@@ -74,15 +83,6 @@ public class DataStreamSerializer implements Serializer {
         }
     }
 
-    private void writeContacts(Resume resume, DataOutputStream dos) throws IOException {
-        Map<ContactType, String> contacts = resume.getContacts();
-        dos.writeInt(contacts.size());
-        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-            dos.writeUTF(entry.getKey().name());
-            dos.writeUTF(entry.getValue());
-        }
-    }
-
     private void readContacts(DataInputStream dis, Resume resume) throws IOException {
         int sizeContacts = dis.readInt();
         for (int i = 0; i < sizeContacts; i++) {
@@ -117,6 +117,15 @@ public class DataStreamSerializer implements Serializer {
         }
     }
 
+    private List<String> getStrings(DataInputStream dis) throws IOException {
+        int sizeAchievement = dis.readInt();
+        List<String> items = new ArrayList<>();
+        for (int k = 0; k < sizeAchievement; k++) {
+            items.add(dis.readUTF());
+        }
+        return items;
+    }
+
     private List<Company> getCompanies(DataInputStream dis) throws IOException {
         int sizeCompanies = dis.readInt();
         List<Company> items = new ArrayList<>();
@@ -129,15 +138,6 @@ public class DataStreamSerializer implements Serializer {
             }
             company.setPeriods(periods);
             items.add(company);
-        }
-        return items;
-    }
-
-    private List<String> getStrings(DataInputStream dis) throws IOException {
-        int sizeAchievement = dis.readInt();
-        List<String> items = new ArrayList<>();
-        for (int k = 0; k < sizeAchievement; k++) {
-            items.add(dis.readUTF());
         }
         return items;
     }
