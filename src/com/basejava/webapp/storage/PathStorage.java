@@ -10,7 +10,6 @@ import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -35,19 +34,17 @@ public class PathStorage extends AbstractStorage<Path> {
 
     @Override
     public int size() {
-        return checkedListPaths(directory).size();
+        return (int)getFilesList().count();
     }
 
     @Override
     public void clear() {
-        checkedListPaths(directory).forEach(this::doDelete);
+        getFilesList().forEach(this::doDelete);
     }
 
     @Override
     protected List<Resume> doCopyAll() {
-        List<Resume> list = new ArrayList<>();
-        checkedListPaths(directory).forEach(path -> list.add(doGet(path)));
-        return list;
+        return getFilesList().map(this::doGet).collect(Collectors.toList());
     }
 
     @Override
@@ -97,9 +94,9 @@ public class PathStorage extends AbstractStorage<Path> {
         return Files.exists(path);
     }
 
-    public List<Path> checkedListPaths(Path directory) {
-        try (Stream<Path> pathStream = Files.list(directory)) {
-            return pathStream.collect(Collectors.toList());
+    private Stream<Path> getFilesList() {
+        try {
+            return Files.list(directory);
         } catch (IOException e) {
             throw new StorageException("Path IO exception", directory.toString(), e);
         }

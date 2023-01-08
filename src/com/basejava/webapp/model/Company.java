@@ -1,5 +1,10 @@
 package com.basejava.webapp.model;
 
+import com.basejava.webapp.util.LocalDateAdapter;
+
+import javax.xml.bind.annotation.XmlAccessType;
+import javax.xml.bind.annotation.XmlAccessorType;
+import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
 import java.time.format.DateTimeFormatter;
@@ -10,12 +15,16 @@ import java.util.Objects;
 import static com.basejava.webapp.util.DateUtil.NOW;
 import static com.basejava.webapp.util.DateUtil.of;
 
+@XmlAccessorType(XmlAccessType.FIELD)
 public class Company implements Serializable {
     private static final long serialVersionUID = 1L;
 
     private String title;
     private String website;
     private List<Period> periods;
+
+    public Company() {
+    }
 
     public Company(String title, String website, Period... periods) {
         Objects.requireNonNull(title, "title must not be null");
@@ -87,13 +96,19 @@ public class Company implements Serializable {
         return result.toString();
     }
 
+    @XmlAccessorType(XmlAccessType.FIELD)
     public static class Period implements Serializable {
         private static final long serialVersionUID = 1L;
 
         private String title;
         private String description;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate startDate;
+        @XmlJavaTypeAdapter(LocalDateAdapter.class)
         private LocalDate endDate;
+
+        public Period() {
+        }
 
         public Period(String title, String description, String startDate, String endDate) {
             this.title = title;
