@@ -55,13 +55,9 @@ public class DataStreamSerializer implements Serializer {
                 case QUALIFICATIONS:
                     ListSection achievement = (ListSection) entry.getValue();
                     dos.writeInt(achievement.getItems().size());
-                    achievement.getItems().forEach(item -> {
-                        try {
-                            dos.writeUTF(item);
-                        } catch (IOException e) {
-                            throw new RuntimeException(e);
-                        }
-                    });
+                    for (String item : achievement.getItems()) {
+                        dos.writeUTF(item);
+                    }
                     break;
                 case EXPERIENCE:
                 case EDUCATION:
