@@ -3,9 +3,7 @@ package com.basejava.webapp.storage.SerializeStrategy;
 import com.basejava.webapp.model.*;
 
 import java.io.*;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 public class DataStreamSerializer implements Serializer {
     @Override
@@ -31,11 +29,39 @@ public class DataStreamSerializer implements Serializer {
     }
 
     private void writeContacts(Resume resume, DataOutputStream dos) throws IOException {
-        Map<ContactType, String> contacts = resume.getContacts();
-        dos.writeInt(contacts.size());
-        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
+        writeWithException(resume.getContacts(), dos, (type, value) -> {
+            dos.writeUTF(type.name());
+            dos.writeUTF(value);
+        });
+    }
+
+/*        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
             dos.writeUTF(entry.getKey().name());
             dos.writeUTF(entry.getValue());
+        }*/
+
+    private <K> void writeWithException(Collection<K> collection, DataOutputStream dos, Consumer<K> function) throws IOException {
+        // dos.writeInt(collection.size());
+        Objects.requireNonNull(function);
+        for (K k : collection) {
+            dos.writeInt(collection.size());
+            function.accept(k);
+        }
+    }
+
+    private <K, V> void writeWithException(Map<K, V> map, DataOutputStream dos, BiConsumer<K, V> function) throws IOException {
+        Objects.requireNonNull(function);
+        dos.writeInt(map.size());
+        for (Map.Entry<K, V> entry : map.entrySet()) {
+            K k;
+            V v;
+            try {
+                k = entry.getKey();
+                v = entry.getValue();
+            } catch (IllegalStateException ise) {
+                throw new ConcurrentModificationException(ise);
+            }
+            function.accept(k, v);
         }
     }
 
