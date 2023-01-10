@@ -80,9 +80,9 @@ public abstract class AbstractStorageTest {
 
     @Test
     public void testUpdate() throws StorageException {
-        Resume tempResume = new Resume(UUID_1, FULLNAME_4);
+        Resume tempResume = new Resume(UUID_2, FULLNAME_4);
         storage.update(tempResume);
-        assertEquals(tempResume, storage.get(UUID_1));
+        assertEquals(tempResume, storage.get(UUID_2));
     }
 
     @Test(expected = NotExistStorageException.class)

@@ -35,21 +35,15 @@ public class DataStreamSerializer implements Serializer {
         });
     }
 
-/*        for (Map.Entry<ContactType, String> entry : contacts.entrySet()) {
-            dos.writeUTF(entry.getKey().name());
-            dos.writeUTF(entry.getValue());
-        }*/
-
-    private <K> void writeWithException(Collection<K> collection, DataOutputStream dos, Consumer<K> function) throws IOException {
-        // dos.writeInt(collection.size());
+    private <K> void writeWithException(Collection<K> collection, DataOutputStream dos, CustomConsumer<K> function) throws IOException {
+        dos.writeInt(collection.size());
         Objects.requireNonNull(function);
         for (K k : collection) {
-            dos.writeInt(collection.size());
             function.accept(k);
         }
     }
 
-    private <K, V> void writeWithException(Map<K, V> map, DataOutputStream dos, BiConsumer<K, V> function) throws IOException {
+    private <K, V> void writeWithException(Map<K, V> map, DataOutputStream dos, CustomBiConsumer<K, V> function) throws IOException {
         Objects.requireNonNull(function);
         dos.writeInt(map.size());
         for (Map.Entry<K, V> entry : map.entrySet()) {
@@ -80,26 +74,21 @@ public class DataStreamSerializer implements Serializer {
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
                     ListSection achievement = (ListSection) entry.getValue();
-                    dos.writeInt(achievement.getItems().size());
-                    for (String item : achievement.getItems()) {
-                        dos.writeUTF(item);
-                    }
+                        writeWithException(achievement.getItems(), dos, dos::writeUTF);
                     break;
                 case EXPERIENCE:
                 case EDUCATION:
                     CompanySection experience = (CompanySection) entry.getValue();
-                    dos.writeInt(experience.getCompanies().size());
-                    for (Company company : experience.getCompanies()) {
+                    writeWithException(experience.getCompanies(), dos, company -> {
                         dos.writeUTF(company.getTitle());
                         dos.writeUTF(checkNullParam(company.getWebsite()));
-                        dos.writeInt(company.getPeriods().size());
-                        for (Company.Period period : company.getPeriods()) {
+                        writeWithException(company.getPeriods(), dos, period -> {
                             dos.writeUTF(period.getTitle());
                             dos.writeUTF(checkNullParam(period.getDescription()));
                             dos.writeUTF(period.getStartDate().toString());
                             dos.writeUTF(period.getEndDate().toString());
-                        }
-                    }
+                        });
+                    });
                     break;
             }
         }
