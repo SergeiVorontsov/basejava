@@ -3,7 +3,10 @@ package com.basejava.webapp.storage.SerializeStrategy;
 import com.basejava.webapp.model.*;
 
 import java.io.*;
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Collection;
+import java.util.List;
+import java.util.Objects;
 
 public class DataStreamSerializer implements Serializer {
     @Override
@@ -29,60 +32,34 @@ public class DataStreamSerializer implements Serializer {
     }
 
     private void writeContacts(Resume resume, DataOutputStream dos) throws IOException {
-        writeWithException(resume.getContacts(), dos, (type, value) -> {
-            dos.writeUTF(type.name());
-            dos.writeUTF(value);
+        writeEachWithException(resume.getContacts().entrySet(), dos, contactTypeStringEntry -> {
+            dos.writeUTF(contactTypeStringEntry.getKey().name());
+            dos.writeUTF(contactTypeStringEntry.getValue());
         });
     }
 
-    private <K> void writeWithException(Collection<K> collection, DataOutputStream dos, CustomConsumer<K> function) throws IOException {
-        dos.writeInt(collection.size());
-        Objects.requireNonNull(function);
-        for (K k : collection) {
-            function.accept(k);
-        }
-    }
-
-    private <K, V> void writeWithException(Map<K, V> map, DataOutputStream dos, CustomBiConsumer<K, V> function) throws IOException {
-        Objects.requireNonNull(function);
-        dos.writeInt(map.size());
-        for (Map.Entry<K, V> entry : map.entrySet()) {
-            K k;
-            V v;
-            try {
-                k = entry.getKey();
-                v = entry.getValue();
-            } catch (IllegalStateException ise) {
-                throw new ConcurrentModificationException(ise);
-            }
-            function.accept(k, v);
-        }
-    }
-
     private void writeSections(Resume resume, DataOutputStream dos) throws IOException {
-        Map<SectionType, Section> sections = resume.getSections();
-        dos.writeInt(sections.size());
-        for (Map.Entry<SectionType, Section> entry : sections.entrySet()) {
-            SectionType sectionType = entry.getKey();
+        writeEachWithException(resume.getSections().entrySet(), dos, sectionTypeSectionEntry -> {
+            SectionType sectionType = sectionTypeSectionEntry.getKey();
             dos.writeUTF(sectionType.name());
             switch (sectionType) {
                 case OBJECTIVE:
                 case PERSONAL:
-                    TextSection objective = (TextSection) entry.getValue();
+                    TextSection objective = (TextSection) sectionTypeSectionEntry.getValue();
                     dos.writeUTF(objective.getContent());
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
-                    ListSection achievement = (ListSection) entry.getValue();
-                        writeWithException(achievement.getItems(), dos, dos::writeUTF);
+                    ListSection achievement = (ListSection) sectionTypeSectionEntry.getValue();
+                    writeEachWithException(achievement.getItems(), dos, dos::writeUTF);
                     break;
                 case EXPERIENCE:
                 case EDUCATION:
-                    CompanySection experience = (CompanySection) entry.getValue();
-                    writeWithException(experience.getCompanies(), dos, company -> {
+                    CompanySection experience = (CompanySection) sectionTypeSectionEntry.getValue();
+                    writeEachWithException(experience.getCompanies(), dos, company -> {
                         dos.writeUTF(company.getTitle());
                         dos.writeUTF(checkNullParam(company.getWebsite()));
-                        writeWithException(company.getPeriods(), dos, period -> {
+                        writeEachWithException(company.getPeriods(), dos, period -> {
                             dos.writeUTF(period.getTitle());
                             dos.writeUTF(checkNullParam(period.getDescription()));
                             dos.writeUTF(period.getStartDate().toString());
@@ -91,7 +68,7 @@ public class DataStreamSerializer implements Serializer {
                     });
                     break;
             }
-        }
+        });
     }
 
     private void readContacts(DataInputStream dis, Resume resume) throws IOException {
@@ -145,6 +122,14 @@ public class DataStreamSerializer implements Serializer {
             items.add(company);
         }
         return items;
+    }
+
+    private <K> void writeEachWithException(Collection<K> collection, DataOutputStream dos, CustomConsumer<K> function) throws IOException {
+        dos.writeInt(collection.size());
+        Objects.requireNonNull(function);
+        for (K k : collection) {
+            function.accept(k);
+        }
     }
 
     private String checkNullParam(DataInputStream dis) throws IOException {
