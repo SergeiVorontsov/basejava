@@ -31,13 +31,13 @@ public class DataStreamSerializer implements Serializer {
                 switch (sectionType) {
                     case OBJECTIVE:
                     case PERSONAL:
-                        resume.setSection(sectionType, new TextSection(dis.readUTF()));
+                        r.setSection(sectionType, new TextSection(dis.readUTF()));
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         List<String> strings = new ArrayList<>();
                         readEachWithException(strings, dis, s -> s.add(dis.readUTF()));
-                        resume.setSection(sectionType, new ListSection(strings));
+                        r.setSection(sectionType, new ListSection(strings));
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
