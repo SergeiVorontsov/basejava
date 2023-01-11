@@ -25,8 +25,34 @@ public class DataStreamSerializer implements Serializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            readContacts(dis, resume);
-            readSections(dis, resume);
+            readEachWithException(resume, dis, r -> r.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readEachWithException(resume, dis, r -> {
+                SectionType sectionType = SectionType.valueOf(dis.readUTF());
+                switch (sectionType) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        resume.setSection(sectionType, new TextSection(dis.readUTF()));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        List<String> strings = new ArrayList<>();
+                        readEachWithException(strings, dis, s -> s.add(dis.readUTF()));
+                        resume.setSection(sectionType, new ListSection(strings));
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        List<Company> companies = new ArrayList<>();
+                        readEachWithException(companies, dis, c -> {
+                            Company company = new Company(dis.readUTF(), checkNullParam(dis));
+                            List<Company.Period> periods = new ArrayList<>();
+                            readEachWithException(periods, dis, p -> p.add(new Company.Period(dis.readUTF(), checkNullParam(dis), dis.readUTF(), dis.readUTF())));
+                            company.setPeriods(periods);
+                            c.add(company);
+                        });
+                        r.setSection(sectionType, new CompanySection(companies));
+                        break;
+                }
+            });
             return resume;
         }
     }
@@ -71,41 +97,6 @@ public class DataStreamSerializer implements Serializer {
         });
     }
 
-    private void readContacts(DataInputStream dis, Resume resume) throws IOException {
-        readEachWithException(resume, dis, r -> r.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
-    }
-
-    private void readSections(DataInputStream dis, Resume resume) throws IOException {
-        readEachWithException(resume, dis, resume1 -> {
-            SectionType sectionType = SectionType.valueOf(dis.readUTF());
-            switch (sectionType) {
-                case OBJECTIVE:
-                case PERSONAL:
-                    resume1.setSection(sectionType, new TextSection(dis.readUTF()));
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    List<String> strings = new ArrayList<>();
-                    DataStreamSerializer.this.readEachWithException(resume1, dis, r -> strings.add(dis.readUTF()));
-                    resume1.setSection(sectionType, new ListSection(strings));
-                    break;
-                case EXPERIENCE:
-                case EDUCATION:
-
-                    List<Company> companies = new ArrayList<>();
-                    DataStreamSerializer.this.readEachWithException(resume1, dis, r -> {
-                        Company company = new Company(dis.readUTF(), DataStreamSerializer.this.checkNullParam(dis));
-                        List<Company.Period> periods = new ArrayList<>();
-                        DataStreamSerializer.this.readEachWithException(resume1, dis, r2 -> periods.add(new Company.Period(dis.readUTF(), DataStreamSerializer.this.checkNullParam(dis), dis.readUTF(), dis.readUTF())));
-                        company.setPeriods(periods);
-                        companies.add(company);
-                    });
-                    resume1.setSection(sectionType, new CompanySection(companies));
-                    break;
-            }
-        });
-    }
-
     private <K> void writeEachWithException(Collection<K> collection, DataOutputStream dos, CustomConsumer<K> function) throws IOException {
         dos.writeInt(collection.size());
         Objects.requireNonNull(function);
@@ -116,7 +107,7 @@ public class DataStreamSerializer implements Serializer {
 
     private <K> void readEachWithException(K k, DataInputStream dis, CustomConsumer<K> consumer) throws IOException {
         int counter = dis.readInt();
-        for (int i = 0; i < counter; i++){
+        for (int i = 0; i < counter; i++) {
             consumer.accept(k);
 
         }
