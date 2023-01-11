@@ -61,7 +61,7 @@ public class DataStreamSerializer implements Serializer {
                         dos.writeUTF(checkNullParam(company.getWebsite()));
                         writeEachWithException(company.getPeriods(), dos, period -> {
                             dos.writeUTF(period.getTitle());
-                            dos.writeUTF(checkNullParam(period.getDescription()));
+                            dos.writeUTF(DataStreamSerializer.this.checkNullParam(period.getDescription()));
                             dos.writeUTF(period.getStartDate().toString());
                             dos.writeUTF(period.getEndDate().toString());
                         });
@@ -72,56 +72,38 @@ public class DataStreamSerializer implements Serializer {
     }
 
     private void readContacts(DataInputStream dis, Resume resume) throws IOException {
-        int sizeContacts = dis.readInt();
-        for (int i = 0; i < sizeContacts; i++) {
-            resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF());
-        }
+        readEachWithException(resume, dis, r -> r.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
     }
 
     private void readSections(DataInputStream dis, Resume resume) throws IOException {
-        int sizeSections = dis.readInt();
-        for (int i = 0; i < sizeSections; i++) {
+        readEachWithException(resume, dis, resume12 -> {
             SectionType sectionType = SectionType.valueOf(dis.readUTF());
             switch (sectionType) {
                 case OBJECTIVE:
                 case PERSONAL:
-                    resume.setSection(sectionType, new TextSection(dis.readUTF()));
+                    resume12.setSection(sectionType, new TextSection(dis.readUTF()));
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
-                    resume.setSection(sectionType, new ListSection(getStrings(dis)));
+                    List<String> strings = new ArrayList<>();
+                    readEachWithException(resume12, dis, r -> strings.add(dis.readUTF()));
+                    resume12.setSection(sectionType, new ListSection(strings));
                     break;
                 case EXPERIENCE:
                 case EDUCATION:
-                    resume.setSection(sectionType, new CompanySection(getCompanies(dis)));
+
+                    List<Company> companies = new ArrayList<>();
+                    readEachWithException(resume12, dis, r -> {
+                        Company company = new Company(dis.readUTF(), checkNullParam(dis));
+                        List<Company.Period> periods = new ArrayList<>();
+                        readEachWithException(resume12, dis, resume1 -> periods.add(new Company.Period(dis.readUTF(), checkNullParam(dis), dis.readUTF(), dis.readUTF())));
+                        company.setPeriods(periods);
+                        companies.add(company);
+                    });
+                    resume12.setSection(sectionType, new CompanySection(companies));
                     break;
             }
-        }
-    }
-
-    private List<String> getStrings(DataInputStream dis) throws IOException {
-        int sizeAchievement = dis.readInt();
-        List<String> items = new ArrayList<>();
-        for (int k = 0; k < sizeAchievement; k++) {
-            items.add(dis.readUTF());
-        }
-        return items;
-    }
-
-    private List<Company> getCompanies(DataInputStream dis) throws IOException {
-        int sizeCompanies = dis.readInt();
-        List<Company> items = new ArrayList<>();
-        for (int k = 0; k < sizeCompanies; k++) {
-            Company company = new Company(dis.readUTF(), checkNullParam(dis));
-            int sizePeriods = dis.readInt();
-            List<Company.Period> periods = new ArrayList<>();
-            for (int j = 0; j < sizePeriods; j++) {
-                periods.add(new Company.Period(dis.readUTF(), checkNullParam(dis), dis.readUTF(), dis.readUTF()));
-            }
-            company.setPeriods(periods);
-            items.add(company);
-        }
-        return items;
+        });
     }
 
     private <K> void writeEachWithException(Collection<K> collection, DataOutputStream dos, CustomConsumer<K> function) throws IOException {
@@ -129,6 +111,14 @@ public class DataStreamSerializer implements Serializer {
         Objects.requireNonNull(function);
         for (K k : collection) {
             function.accept(k);
+        }
+    }
+
+    private void readEachWithException(Resume resume, DataInputStream dis, CustomConsumer<Resume> consumer) throws IOException {
+        int counter = dis.readInt();
+        for (int i = 0; i < counter; i++){
+            consumer.accept(resume);
+
         }
     }
 
