@@ -14,8 +14,40 @@ public class DataStreamSerializer implements Serializer {
         try (DataOutputStream dos = new DataOutputStream(os)) {
             dos.writeUTF(resume.getUuid());
             dos.writeUTF(resume.getFullName());
-            writeContacts(resume, dos);
-            writeSections(resume, dos);
+            writeEachWithException(resume.getContacts().entrySet(), dos, contactTypeStringEntry -> {
+                dos.writeUTF(contactTypeStringEntry.getKey().name());
+                dos.writeUTF(contactTypeStringEntry.getValue());
+            });
+            writeEachWithException(resume.getSections().entrySet(), dos, sectionTypeSectionEntry -> {
+                SectionType sectionType = sectionTypeSectionEntry.getKey();
+                dos.writeUTF(sectionType.name());
+                switch (sectionType) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        TextSection objective = (TextSection) sectionTypeSectionEntry.getValue();
+                        dos.writeUTF(objective.getContent());
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        ListSection achievement = (ListSection) sectionTypeSectionEntry.getValue();
+                        writeEachWithException(achievement.getItems(), dos, dos::writeUTF);
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        CompanySection experience = (CompanySection) sectionTypeSectionEntry.getValue();
+                        writeEachWithException(experience.getCompanies(), dos, company -> {
+                            dos.writeUTF(company.getTitle());
+                            dos.writeUTF(checkNullParam(company.getWebsite()));
+                            writeEachWithException(company.getPeriods(), dos, period -> {
+                                dos.writeUTF(period.getTitle());
+                                dos.writeUTF(DataStreamSerializer.this.checkNullParam(period.getDescription()));
+                                dos.writeUTF(period.getStartDate().toString());
+                                dos.writeUTF(period.getEndDate().toString());
+                            });
+                        });
+                        break;
+                }
+            });
         }
     }
 
@@ -55,46 +87,6 @@ public class DataStreamSerializer implements Serializer {
             });
             return resume;
         }
-    }
-
-    private void writeContacts(Resume resume, DataOutputStream dos) throws IOException {
-        writeEachWithException(resume.getContacts().entrySet(), dos, contactTypeStringEntry -> {
-            dos.writeUTF(contactTypeStringEntry.getKey().name());
-            dos.writeUTF(contactTypeStringEntry.getValue());
-        });
-    }
-
-    private void writeSections(Resume resume, DataOutputStream dos) throws IOException {
-        writeEachWithException(resume.getSections().entrySet(), dos, sectionTypeSectionEntry -> {
-            SectionType sectionType = sectionTypeSectionEntry.getKey();
-            dos.writeUTF(sectionType.name());
-            switch (sectionType) {
-                case OBJECTIVE:
-                case PERSONAL:
-                    TextSection objective = (TextSection) sectionTypeSectionEntry.getValue();
-                    dos.writeUTF(objective.getContent());
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    ListSection achievement = (ListSection) sectionTypeSectionEntry.getValue();
-                    writeEachWithException(achievement.getItems(), dos, dos::writeUTF);
-                    break;
-                case EXPERIENCE:
-                case EDUCATION:
-                    CompanySection experience = (CompanySection) sectionTypeSectionEntry.getValue();
-                    writeEachWithException(experience.getCompanies(), dos, company -> {
-                        dos.writeUTF(company.getTitle());
-                        dos.writeUTF(checkNullParam(company.getWebsite()));
-                        writeEachWithException(company.getPeriods(), dos, period -> {
-                            dos.writeUTF(period.getTitle());
-                            dos.writeUTF(DataStreamSerializer.this.checkNullParam(period.getDescription()));
-                            dos.writeUTF(period.getStartDate().toString());
-                            dos.writeUTF(period.getEndDate().toString());
-                        });
-                    });
-                    break;
-            }
-        });
     }
 
     private <K> void writeEachWithException(Collection<K> collection, DataOutputStream dos, CustomConsumer<K> action) throws IOException {
