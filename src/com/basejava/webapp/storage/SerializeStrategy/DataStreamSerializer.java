@@ -97,18 +97,19 @@ public class DataStreamSerializer implements Serializer {
         });
     }
 
-    private <K> void writeEachWithException(Collection<K> collection, DataOutputStream dos, CustomConsumer<K> function) throws IOException {
+    private <K> void writeEachWithException(Collection<K> collection, DataOutputStream dos, CustomConsumer<K> action) throws IOException {
+        Objects.requireNonNull(action);
         dos.writeInt(collection.size());
-        Objects.requireNonNull(function);
         for (K k : collection) {
-            function.accept(k);
+            action.accept(k);
         }
     }
 
-    private <K> void readEachWithException(K k, DataInputStream dis, CustomConsumer<K> consumer) throws IOException {
+    private <K> void readEachWithException(K k, DataInputStream dis, CustomConsumer<K> action) throws IOException {
+        Objects.requireNonNull(action);
         int counter = dis.readInt();
         for (int i = 0; i < counter; i++) {
-            consumer.accept(k);
+            action.accept(k);
 
         }
     }
