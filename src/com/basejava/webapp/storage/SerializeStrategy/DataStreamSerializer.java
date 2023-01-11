@@ -76,31 +76,31 @@ public class DataStreamSerializer implements Serializer {
     }
 
     private void readSections(DataInputStream dis, Resume resume) throws IOException {
-        readEachWithException(resume, dis, resume12 -> {
+        readEachWithException(resume, dis, resume1 -> {
             SectionType sectionType = SectionType.valueOf(dis.readUTF());
             switch (sectionType) {
                 case OBJECTIVE:
                 case PERSONAL:
-                    resume12.setSection(sectionType, new TextSection(dis.readUTF()));
+                    resume1.setSection(sectionType, new TextSection(dis.readUTF()));
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
                     List<String> strings = new ArrayList<>();
-                    readEachWithException(resume12, dis, r -> strings.add(dis.readUTF()));
-                    resume12.setSection(sectionType, new ListSection(strings));
+                    DataStreamSerializer.this.readEachWithException(resume1, dis, r -> strings.add(dis.readUTF()));
+                    resume1.setSection(sectionType, new ListSection(strings));
                     break;
                 case EXPERIENCE:
                 case EDUCATION:
 
                     List<Company> companies = new ArrayList<>();
-                    readEachWithException(resume12, dis, r -> {
-                        Company company = new Company(dis.readUTF(), checkNullParam(dis));
+                    DataStreamSerializer.this.readEachWithException(resume1, dis, r -> {
+                        Company company = new Company(dis.readUTF(), DataStreamSerializer.this.checkNullParam(dis));
                         List<Company.Period> periods = new ArrayList<>();
-                        readEachWithException(resume12, dis, resume1 -> periods.add(new Company.Period(dis.readUTF(), checkNullParam(dis), dis.readUTF(), dis.readUTF())));
+                        DataStreamSerializer.this.readEachWithException(resume1, dis, r2 -> periods.add(new Company.Period(dis.readUTF(), DataStreamSerializer.this.checkNullParam(dis), dis.readUTF(), dis.readUTF())));
                         company.setPeriods(periods);
                         companies.add(company);
                     });
-                    resume12.setSection(sectionType, new CompanySection(companies));
+                    resume1.setSection(sectionType, new CompanySection(companies));
                     break;
             }
         });
@@ -114,10 +114,10 @@ public class DataStreamSerializer implements Serializer {
         }
     }
 
-    private void readEachWithException(Resume resume, DataInputStream dis, CustomConsumer<Resume> consumer) throws IOException {
+    private <K> void readEachWithException(K k, DataInputStream dis, CustomConsumer<K> consumer) throws IOException {
         int counter = dis.readInt();
         for (int i = 0; i < counter; i++){
-            consumer.accept(resume);
+            consumer.accept(k);
 
         }
     }
