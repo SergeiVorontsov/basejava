@@ -57,8 +57,8 @@ public class DataStreamSerializer implements Serializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            readEachWithException(dis, () -> resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
-            readEachWithException(dis, () -> {
+            readForiWithException(dis, () -> resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readForiWithException(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
                     case OBJECTIVE:
@@ -68,16 +68,16 @@ public class DataStreamSerializer implements Serializer {
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         List<String> strings = new ArrayList<>();
-                        readEachWithException(dis, () -> strings.add(dis.readUTF()));
+                        readForiWithException(dis, () -> strings.add(dis.readUTF()));
                         resume.setSection(sectionType, new ListSection(strings));
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Company> companies = new ArrayList<>();
-                        readEachWithException(dis, () -> {
+                        readForiWithException(dis, () -> {
                             Company company = new Company(dis.readUTF(), checkNullParam(dis));
                             List<Company.Period> periods = new ArrayList<>();
-                            readEachWithException(dis, () -> periods.add(new Company.Period(dis.readUTF(), checkNullParam(dis), dis.readUTF(), dis.readUTF())));
+                            readForiWithException(dis, () -> periods.add(new Company.Period(dis.readUTF(), checkNullParam(dis), dis.readUTF(), dis.readUTF())));
                             company.setPeriods(periods);
                             companies.add(company);
                         });
@@ -97,12 +97,11 @@ public class DataStreamSerializer implements Serializer {
         }
     }
 
-    private void readEachWithException(DataInputStream dis, Action action) throws IOException {
+    private void readForiWithException(DataInputStream dis, Action action) throws IOException {
         Objects.requireNonNull(action);
         int counter = dis.readInt();
         for (int i = 0; i < counter; i++) {
             action.accept();
-
         }
     }
 
