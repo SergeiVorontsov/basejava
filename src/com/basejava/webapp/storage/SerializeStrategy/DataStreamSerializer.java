@@ -57,31 +57,31 @@ public class DataStreamSerializer implements Serializer {
             String uuid = dis.readUTF();
             String fullName = dis.readUTF();
             Resume resume = new Resume(uuid, fullName);
-            readEachWithException(resume, dis, r -> r.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
-            readEachWithException(resume, dis, r -> {
+            readEachWithException(dis, () -> resume.setContact(ContactType.valueOf(dis.readUTF()), dis.readUTF()));
+            readEachWithException(dis, () -> {
                 SectionType sectionType = SectionType.valueOf(dis.readUTF());
                 switch (sectionType) {
                     case OBJECTIVE:
                     case PERSONAL:
-                        r.setSection(sectionType, new TextSection(dis.readUTF()));
+                        resume.setSection(sectionType, new TextSection(dis.readUTF()));
                         break;
                     case ACHIEVEMENT:
                     case QUALIFICATIONS:
                         List<String> strings = new ArrayList<>();
-                        readEachWithException(strings, dis, s -> s.add(dis.readUTF()));
-                        r.setSection(sectionType, new ListSection(strings));
+                        readEachWithException(dis, () -> strings.add(dis.readUTF()));
+                        resume.setSection(sectionType, new ListSection(strings));
                         break;
                     case EXPERIENCE:
                     case EDUCATION:
                         List<Company> companies = new ArrayList<>();
-                        readEachWithException(companies, dis, c -> {
+                        readEachWithException(dis, () -> {
                             Company company = new Company(dis.readUTF(), checkNullParam(dis));
                             List<Company.Period> periods = new ArrayList<>();
-                            readEachWithException(periods, dis, p -> p.add(new Company.Period(dis.readUTF(), checkNullParam(dis), dis.readUTF(), dis.readUTF())));
+                            readEachWithException(dis, () -> periods.add(new Company.Period(dis.readUTF(), checkNullParam(dis), dis.readUTF(), dis.readUTF())));
                             company.setPeriods(periods);
-                            c.add(company);
+                            companies.add(company);
                         });
-                        r.setSection(sectionType, new CompanySection(companies));
+                        resume.setSection(sectionType, new CompanySection(companies));
                         break;
                 }
             });
@@ -97,11 +97,11 @@ public class DataStreamSerializer implements Serializer {
         }
     }
 
-    private <K> void readEachWithException(K k, DataInputStream dis, CustomConsumer<K> action) throws IOException {
+    private void readEachWithException(DataInputStream dis, Action action) throws IOException {
         Objects.requireNonNull(action);
         int counter = dis.readInt();
         for (int i = 0; i < counter; i++) {
-            action.accept(k);
+            action.accept();
 
         }
     }
