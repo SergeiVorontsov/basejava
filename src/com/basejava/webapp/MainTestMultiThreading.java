@@ -24,7 +24,6 @@ class Runner {
     public void method1() {
         synchroAction(monitor1, monitor2);
         System.out.println("Thirst thread done");
-
     }
 
     public void method2() {
