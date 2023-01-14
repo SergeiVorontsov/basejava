@@ -22,26 +22,24 @@ class Runner {
     private final Monitor monitor2 = new Monitor();
 
     public void method1() {
-        for (int i = 0; i < 10000; i++) {
-            synchronized (monitor1) {
-                synchronized (monitor2) {
-                    Monitor.action(monitor1,monitor2);
-                }
-            }
-        }
+        synchroAction(monitor1, monitor2);
         System.out.println("Thirst thread done");
 
     }
 
     public void method2() {
+        synchroAction(monitor2, monitor1);
+        System.out.println("Second thread done");
+    }
+
+    private void synchroAction(Monitor mon1, Monitor mon2) {
         for (int i = 0; i < 10000; i++) {
-            synchronized (monitor2) {
-                synchronized (monitor1) {
-                    Monitor.action(monitor1,monitor2);
+            synchronized (mon1) {
+                synchronized (mon2) {
+                    Monitor.action(mon1,mon2);
                 }
             }
         }
-        System.out.println("Second thread done");
     }
 }
 
