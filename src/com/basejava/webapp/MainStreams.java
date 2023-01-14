@@ -32,7 +32,7 @@ public class MainStreams {
     public static List<Integer> oddOrEven(List<Integer> integers) {
         return integers.stream()
                 .filter(integer -> {
-                    if (integers.stream().reduce(0, Integer::sum) % 2 == 0) {
+                    if (integers.stream().reduce(0, Integer::sum) % 2 != 0) {
                         return integer % 2 == 0;
                     } else {
                         return integer % 2 != 0;
