@@ -34,7 +34,7 @@ public class SqlStorage implements Storage {
 
     @Override
     public void clear() {
-        sqlHelper.execute("DELETE FROM resume", (Executor<Resume>) statement -> {
+        sqlHelper.execute("DELETE FROM resume", statement -> {
             statement.execute();
             return null;
         });
@@ -56,7 +56,7 @@ public class SqlStorage implements Storage {
     @Override
     public void update(Resume resume) throws StorageException {
         LOG.info("Update " + resume);
-        sqlHelper.execute("UPDATE resume SET full_name=? WHERE uuid=?", (Executor<Resume>) statement -> {
+        sqlHelper.execute("UPDATE resume SET full_name=? WHERE uuid=?", statement -> {
             statement.setString(1, resume.getFullName());
             statement.setString(2, resume.getUuid());
             if (statement.executeUpdate() == 0) {
@@ -84,7 +84,7 @@ public class SqlStorage implements Storage {
     @Override
     public void delete(String uuid) throws NotExistStorageException {
         LOG.info("Delete " + uuid);
-        sqlHelper.execute("DELETE FROM resume WHERE uuid=?", (Executor<Resume>) preparedStatement -> {
+        sqlHelper.execute("DELETE FROM resume WHERE uuid=?", preparedStatement -> {
             preparedStatement.setString(1, uuid);
             if (preparedStatement.executeUpdate() == 0)
                 throw new NotExistStorageException(uuid);
