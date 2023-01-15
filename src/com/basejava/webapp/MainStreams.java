@@ -12,9 +12,17 @@ public class MainStreams {
         System.out.println(minValue(ThreadLocalRandom
                 .current()
                 .ints(9, 1, 10)
-                .toArray()));
+                .toArray()
+        ));
 
         System.out.println(oddOrEven(ThreadLocalRandom
+                .current()
+                .ints(9, 1, 10)
+                .boxed()
+                .collect(Collectors.toList())
+        ));
+
+        System.out.println(oddOrEven2(ThreadLocalRandom
                 .current()
                 .ints(9, 1, 10)
                 .boxed()
@@ -30,14 +38,29 @@ public class MainStreams {
     }
 
     public static List<Integer> oddOrEven(List<Integer> integers) {
+        boolean isOdd = integers.stream().reduce(0, Integer::sum) % 2 != 0;
         return integers.stream()
-                .filter(integer -> {
-                    if (integers.stream().reduce(0, Integer::sum) % 2 != 0) {
-                        return integer % 2 == 0;
-                    } else {
-                        return integer % 2 != 0;
-                    }
-                })
+                .filter(isOdd ? integer -> integer % 2 == 0 : integer -> integer % 2 != 0)
                 .collect(Collectors.toList());
     }
+
+
+    public static List<Integer> oddOrEven2(List<Integer> integers) {
+        boolean isOdd = integers.stream().reduce(0, Integer::sum) % 2 != 0;
+        return isOdd ? getOdd(integers) : getEven(integers);
+
+    }
+
+    private static List<Integer> getEven(List<Integer> integers) {
+        return integers.stream()
+                .filter(integer -> integer % 2 == 0)
+                .collect(Collectors.toList());
+    }
+
+    private static List<Integer> getOdd(List<Integer> integers) {
+        return integers.stream()
+                .filter(integer -> integer % 2 != 0)
+                .collect(Collectors.toList());
+    }
+
 }
