@@ -13,6 +13,7 @@ import static com.basejava.webapp.util.ResumeUtil.*;
 public class ResumeTestData {
     public static Resume fillResume1(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
+/*
         resume.setContact(ContactType.PHONE, "777-77-77");
         resume.setContact(ContactType.EMAIL, "info@gmail.com");
         resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
@@ -25,13 +26,14 @@ public class ResumeTestData {
                         new Company.Period("Position2", "Description2", "05.2022")
                 ))
         );
+*/
 
         return resume;
     }
 
     public static Resume fillResume2(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        resume.setContact(ContactType.PHONE, "777-77-78");
+/*        resume.setContact(ContactType.PHONE, "777-77-78");
         resume.setContact(ContactType.EMAIL, "mail@gmail.com");
         resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective2"));
         resume.setSection(SectionType.PERSONAL, new TextSection("Objective2"));
@@ -42,13 +44,13 @@ public class ResumeTestData {
                         new Company.Period("Position2.1", "Description2.1", "04.2021", "07.2021"),
                         new Company.Period("Position3.2", "Description3.2", "04.2022", "07.2022")
                 ))
-        );
+        );*/
         return resume;
     }
 
     public static Resume fillResume3(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        resume.setContact(ContactType.PHONE, "777-77-79");
+/*        resume.setContact(ContactType.PHONE, "777-77-79");
         resume.setContact(ContactType.EMAIL, "mail12@gmail.com");
         resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective21"));
         resume.setSection(SectionType.PERSONAL, new TextSection("Objective21"));
@@ -59,13 +61,13 @@ public class ResumeTestData {
                         new Company.Period("Position2.16", "Description2.16", "08.2021", "09.2021"),
                         new Company.Period("Position3.26", "Description3.26", "08.2022", "09.2022")
                 ))
-        );
+        );*/
         return resume;
     }
 
     public static Resume fillResume4(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        resume.setContact(ContactType.PHONE, "777-77-80");
+/*        resume.setContact(ContactType.PHONE, "777-77-80");
         resume.setContact(ContactType.EMAIL, "mail80@gmail.com");
         resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective210"));
         resume.setSection(SectionType.PERSONAL, new TextSection("Objective210"));
@@ -76,7 +78,7 @@ public class ResumeTestData {
                         new Company.Period("Position2.163", "Description2.163", "08.2021", "10.2021"),
                         new Company.Period("Position3.263", "Description3.263", "08.2022", "10.2022")
                 ))
-        );
+        );*/
         return resume;
     }
 
