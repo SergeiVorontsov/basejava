@@ -4,6 +4,6 @@ import com.basejava.webapp.Config;
 
 public class SqlStorageTest extends AbstractStorageTest {
     public SqlStorageTest() {
-        super(new SqlStorage(Config.get().getDbUrl(), Config.get().getUser(), Config.get().getPassword()));
+        super(new SqlStorage(new SqlHelper(Config.get().getDbUrl(), Config.get().getUser(), Config.get().getPassword())));
     }
 }
