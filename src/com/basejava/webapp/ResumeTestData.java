@@ -13,9 +13,9 @@ import static com.basejava.webapp.util.ResumeUtil.*;
 public class ResumeTestData {
     public static Resume fillResume1(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-/*
         resume.setContact(ContactType.PHONE, "777-77-77");
         resume.setContact(ContactType.EMAIL, "info@gmail.com");
+/*
         resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
         resume.setSection(SectionType.PERSONAL, new TextSection("Objective1"));
         resume.setSection(SectionType.ACHIEVEMENT, new ListSection("Achievement1", "Achievement2", "Achievement3"));
@@ -33,9 +33,9 @@ public class ResumeTestData {
 
     public static Resume fillResume2(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-/*        resume.setContact(ContactType.PHONE, "777-77-78");
+        resume.setContact(ContactType.PHONE, "777-77-78");
         resume.setContact(ContactType.EMAIL, "mail@gmail.com");
-        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective2"));
+/*        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective2"));
         resume.setSection(SectionType.PERSONAL, new TextSection("Objective2"));
         resume.setSection(SectionType.ACHIEVEMENT, new ListSection("Achievement2.1", "Achievement2.2", "Achievement2.3"));
         resume.setSection(SectionType.EXPERIENCE, new CompanySection(
@@ -50,9 +50,9 @@ public class ResumeTestData {
 
     public static Resume fillResume3(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-/*        resume.setContact(ContactType.PHONE, "777-77-79");
+        resume.setContact(ContactType.PHONE, "777-77-79");
         resume.setContact(ContactType.EMAIL, "mail12@gmail.com");
-        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective21"));
+/*        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective21"));
         resume.setSection(SectionType.PERSONAL, new TextSection("Objective21"));
         resume.setSection(SectionType.ACHIEVEMENT, new ListSection("Achievement2.11", "Achievement2.21", "Achievement2.31"));
         resume.setSection(SectionType.EXPERIENCE, new CompanySection(
@@ -67,9 +67,9 @@ public class ResumeTestData {
 
     public static Resume fillResume4(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-/*        resume.setContact(ContactType.PHONE, "777-77-80");
+        resume.setContact(ContactType.PHONE, "777-77-80");
         resume.setContact(ContactType.EMAIL, "mail80@gmail.com");
-        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective210"));
+/*        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective210"));
         resume.setSection(SectionType.PERSONAL, new TextSection("Objective210"));
         resume.setSection(SectionType.ACHIEVEMENT, new ListSection("Achievement2.110", "Achievement2.210", "Achievement2.310"));
         resume.setSection(SectionType.EXPERIENCE, new CompanySection(
