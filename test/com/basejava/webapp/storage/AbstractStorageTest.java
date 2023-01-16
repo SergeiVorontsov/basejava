@@ -20,10 +20,10 @@ import static org.junit.Assert.assertEquals;
 public abstract class AbstractStorageTest {
     protected static final File STORAGE_DIR = Config.get().getStorageDir();
     protected final Storage storage;
-    public static final String UUID_1 = "uuid1";
-    public static final String UUID_2 = "uuid2";
-    public static final String UUID_3 = "uuid3";
-    public static final String UUID_4 = "uuid4";
+    public static final String UUID_1 = "cd6ecd59-7e8b-4880-a605-5625d493d101";
+    public static final String UUID_2 = "bd0cdcf7-cc95-4a3a-a40c-5ced56d01986";
+    public static final String UUID_3 = "e16962ff-08d8-46ea-9bfd-0437a0e91293";
+    public static final String UUID_4 = "c9af43bc-6005-4626-bff9-31b6debc5b81";
     public static final String FULLNAME_1 = "Bob";
     public static final String FULLNAME_2 = "Jack";
     public static final String FULLNAME_3 = "Tom";
