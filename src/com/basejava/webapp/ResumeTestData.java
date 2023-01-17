@@ -15,11 +15,11 @@ public class ResumeTestData {
         Resume resume = new Resume(uuid, fullName);
         resume.setContact(ContactType.PHONE, "777-77-77");
         resume.setContact(ContactType.EMAIL, "info@gmail.com");
-/*
+
         resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective1"));
         resume.setSection(SectionType.PERSONAL, new TextSection("Objective1"));
         resume.setSection(SectionType.ACHIEVEMENT, new ListSection("Achievement1", "Achievement2", "Achievement3"));
-        resume.setSection(SectionType.EXPERIENCE, new CompanySection(
+ /*       resume.setSection(SectionType.EXPERIENCE, new CompanySection(
                 new Company("Company Name", "www.site.com",
                         new Company.Period("Position", "Description", "05.2020", "06.2020"),
                         new Company.Period("Position1", "Description1", "05.2021", "06.2021"),
@@ -34,11 +34,10 @@ public class ResumeTestData {
     public static Resume fillResume2(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
         resume.setContact(ContactType.PHONE, "777-77-78");
-        resume.setContact(ContactType.EMAIL, "mail@gmail.com");
-/*        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective2"));
-        resume.setSection(SectionType.PERSONAL, new TextSection("Objective2"));
+        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective2"));
+        resume.setSection(SectionType.PERSONAL, new TextSection("Personal2"));
         resume.setSection(SectionType.ACHIEVEMENT, new ListSection("Achievement2.1", "Achievement2.2", "Achievement2.3"));
-        resume.setSection(SectionType.EXPERIENCE, new CompanySection(
+ /*       resume.setSection(SectionType.EXPERIENCE, new CompanySection(
                 new Company("Company Name2", "www.site2.com",
                         new Company.Period("Position1", "Description1", "04.2020", "07.2020"),
                         new Company.Period("Position2.1", "Description2.1", "04.2021", "07.2021"),
@@ -50,12 +49,11 @@ public class ResumeTestData {
 
     public static Resume fillResume3(String uuid, String fullName) {
         Resume resume = new Resume(uuid, fullName);
-        resume.setContact(ContactType.PHONE, "777-77-79");
         resume.setContact(ContactType.EMAIL, "mail12@gmail.com");
-/*        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective21"));
-        resume.setSection(SectionType.PERSONAL, new TextSection("Objective21"));
+       resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective21"));
+        resume.setSection(SectionType.PERSONAL, new TextSection("Personal21"));
         resume.setSection(SectionType.ACHIEVEMENT, new ListSection("Achievement2.11", "Achievement2.21", "Achievement2.31"));
-        resume.setSection(SectionType.EXPERIENCE, new CompanySection(
+ /*       resume.setSection(SectionType.EXPERIENCE, new CompanySection(
                 new Company("Company Name2", "www.site2.com",
                         new Company.Period("Position16", "Description16", "08.2020", "09.2020"),
                         new Company.Period("Position2.16", "Description2.16", "08.2021", "09.2021"),
@@ -69,10 +67,9 @@ public class ResumeTestData {
         Resume resume = new Resume(uuid, fullName);
         resume.setContact(ContactType.PHONE, "777-77-80");
         resume.setContact(ContactType.EMAIL, "mail80@gmail.com");
-/*        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective210"));
-        resume.setSection(SectionType.PERSONAL, new TextSection("Objective210"));
+        resume.setSection(SectionType.OBJECTIVE, new TextSection("Objective210"));
         resume.setSection(SectionType.ACHIEVEMENT, new ListSection("Achievement2.110", "Achievement2.210", "Achievement2.310"));
-        resume.setSection(SectionType.EXPERIENCE, new CompanySection(
+/*        resume.setSection(SectionType.EXPERIENCE, new CompanySection(
                 new Company("Company Name23", "www.site23.com",
                         new Company.Period("Position163", "Description163", "08.2020", "10.2020"),
                         new Company.Period("Position2.163", "Description2.163", "08.2021", "10.2021"),
