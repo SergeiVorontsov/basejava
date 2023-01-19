@@ -15,6 +15,11 @@ public class SqlStorage implements Storage {
     private final SqlHelper sqlHelper;
 
     public SqlStorage(String dbUrl, String dbUser, String dbPassword) {
+        try {
+            Class.forName("org.postgresql.Driver");
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
+        }
         sqlHelper = new SqlHelper(() -> DriverManager.getConnection(dbUrl, dbUser, dbPassword));
     }
 
@@ -40,7 +45,6 @@ public class SqlStorage implements Storage {
                     "SELECT * FROM resume r " +
                     "ORDER BY full_name ")) {
                 ResultSet rs = statement.executeQuery();
-
                 while (rs.next()) {
                     resumes.put(rs.getString("uuid"),
                             new Resume(rs.getString("uuid"), rs.getString("full_name")));
@@ -52,8 +56,7 @@ public class SqlStorage implements Storage {
                     "ORDER BY contact_type ")) {
                 ResultSet rs = statement.executeQuery();
                 while (rs.next()) {
-                    resumes.get(rs.getString("resume_uuid"))
-                            .setContact(ContactType.valueOf(rs.getString("contact_type")), rs.getString("contact_value"));
+                    getContact(rs, resumes.get(rs.getString("resume_uuid")));
                 }
             }
             try (PreparedStatement statement = conn.prepareStatement("" +
@@ -62,22 +65,7 @@ public class SqlStorage implements Storage {
                     "ORDER BY section_type")) {
                 ResultSet rs = statement.executeQuery();
                 while (rs.next()) {
-                    String uuid = rs.getString("resume_uuid");
-                    SectionType type = SectionType.valueOf(rs.getString("section_type"));
-                    switch (type) {
-                        case OBJECTIVE:
-                        case PERSONAL:
-                            resumes.get(uuid).setSection(type, new TextSection(rs.getString("section_value")));
-                            break;
-                        case ACHIEVEMENT:
-                        case QUALIFICATIONS:
-                            List<String> list = new ArrayList<>(Arrays.asList(rs.getString("section_value").split("\n")));
-                            resumes.get(uuid).setSection(type, new ListSection(list));
-                            break;
-                        case EXPERIENCE:
-                        case EDUCATION:
-                            break;
-                    }
+                    getSection(rs, resumes.get(rs.getString("resume_uuid")));
                 }
             }
             return new ArrayList<>(resumes.values());
@@ -147,41 +135,50 @@ public class SqlStorage implements Storage {
             try (PreparedStatement statement = conn.prepareStatement("SELECT * FROM contact WHERE resume_uuid=?\n")) {
                 statement.setString(1, uuid);
                 ResultSet rs = statement.executeQuery();
-                getContact(rs, resume);
+                while (rs.next()) {
+                    getContact(rs, resume);
+                }
             }
             try (PreparedStatement statement = conn.prepareStatement("SELECT * FROM section WHERE resume_uuid=?\n")) {
                 statement.setString(1, uuid);
                 ResultSet rs = statement.executeQuery();
-                getSection(rs, resume);
+                while (rs.next()) {
+                    getSection(rs, resume);
+                }
             }
             return resume;
         });
     }
 
     private void getContact(ResultSet rs, Resume resume) throws SQLException {
-        while (rs.next()) {
+        {
             String value = rs.getString("contact_value");
-            ContactType type = ContactType.valueOf(rs.getString("contact_type"));
-            resume.getContacts().put(type, value);
+            if (value != null) {
+                ContactType type = ContactType.valueOf(rs.getString("contact_type"));
+                resume.getContacts().put(type, value);
+            }
         }
     }
 
     private void getSection(ResultSet rs, Resume resume) throws SQLException {
-        while (rs.next()) {
+        {
             SectionType type = SectionType.valueOf(rs.getString("section_type"));
-            switch (type) {
-                case OBJECTIVE:
-                case PERSONAL:
-                    resume.setSection(type, new TextSection(rs.getString("section_value")));
-                    break;
-                case ACHIEVEMENT:
-                case QUALIFICATIONS:
-                    List<String> list = new ArrayList<>(Arrays.asList(rs.getString("section_value").split("\n")));
-                    resume.setSection(type, new ListSection(list));
-                    break;
-                case EXPERIENCE:
-                case EDUCATION:
-                    break;
+            String value = rs.getString("section_value");
+            if (value != null) {
+                switch (type) {
+                    case OBJECTIVE:
+                    case PERSONAL:
+                        resume.setSection(type, new TextSection(value));
+                        break;
+                    case ACHIEVEMENT:
+                    case QUALIFICATIONS:
+                        List<String> list = new ArrayList<>(Arrays.asList(value.split("\n")));
+                        resume.setSection(type, new ListSection(list));
+                        break;
+                    case EXPERIENCE:
+                    case EDUCATION:
+                        break;
+                }
             }
         }
     }
