@@ -13,6 +13,7 @@ public class Config {
     protected static final File PROPS = new File("\\config\\resumes.properties");
     private static final Config INSTANCE = new Config();
 
+
     private final Properties props = new Properties();
     private final Storage storage;
     private final File storageDir;
@@ -25,7 +26,7 @@ public class Config {
         try (InputStream is = Files.newInputStream(PROPS.toPath())) {
             props.load(is);
             storageDir = new File(props.getProperty("storage.dir"));
-            storage = new SqlStorage(props.getProperty("db.url"), props.getProperty("db.user"), props.getProperty("db.password"));
+            storage = new SqlStorage(props.getProperty("db.url"), props.getProperty("db.user"), props.getProperty("db.password"), props.getProperty("db.driver"));
         } catch (IOException e) {
             throw new IllegalStateException(("Invalid config file " + PROPS.getAbsolutePath()));
         }
