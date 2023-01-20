@@ -31,7 +31,7 @@ public class MainTestArrayStorage {
         printAll();
         ARRAY_STORAGE.delete(r1.getUuid());
 
-       // r2.setUuid("uuid22");
+        // r2.setUuid("uuid22");
         ARRAY_STORAGE.update(r2);
 
         printAll();

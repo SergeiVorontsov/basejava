@@ -225,18 +225,14 @@ public class SqlStorage implements Storage {
     private void removeContact(Resume resume, Connection conn) throws SQLException {
         try (PreparedStatement statement = conn.prepareStatement("DELETE FROM contact WHERE resume_uuid=?")) {
             statement.setString(1, resume.getUuid());
-            if (statement.executeUpdate() == 0) {
-                throw new StorageException("Contacts have not been updated", resume.getUuid());
-            }
+            statement.executeUpdate();
         }
     }
 
     private void removeSection(Resume resume, Connection conn) throws SQLException {
         try (PreparedStatement statement = conn.prepareStatement("DELETE FROM section WHERE resume_uuid=?")) {
             statement.setString(1, resume.getUuid());
-            if (statement.executeUpdate() == 0) {
-                throw new StorageException("Section have not been updated", resume.getUuid());
-            }
+            statement.executeUpdate();
         }
     }
 }
