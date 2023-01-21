@@ -193,11 +193,11 @@ public class Company implements Serializable {
         public String toString() {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
 
-            return "\u001B[33m" +
+            return //"\u001B[33m" +
                     startDate.format(formatter) +
                     "-" +
                     endDate.format(formatter) +
-                    "\u001B[0m" +
+                   // "\u001B[0m" +
                     " " +
                     title +
                     '\n' +

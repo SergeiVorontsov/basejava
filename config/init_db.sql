@@ -25,5 +25,5 @@ create table section
 );
 
 
-create unique index section_uuid_type_index on section (resume_uuid, section_type)
+create unique index section_uuid_type_index on section (resume_uuid, section_type);
 

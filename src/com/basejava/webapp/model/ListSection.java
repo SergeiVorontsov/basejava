@@ -45,7 +45,7 @@ public class ListSection extends Section {
     public String toString() {
         StringBuilder result = new StringBuilder();
         for (String string : items) {
-            result.append('\u2022').append(string).append('\n');
+            result.append(string).append('\n');
         }
         return result.toString();
     }

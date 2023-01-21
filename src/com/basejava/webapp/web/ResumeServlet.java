@@ -1,8 +1,7 @@
 package com.basejava.webapp.web;
 
 import com.basejava.webapp.Config;
-import com.basejava.webapp.model.ContactType;
-import com.basejava.webapp.model.Resume;
+import com.basejava.webapp.model.*;
 import com.basejava.webapp.storage.Storage;
 
 import javax.servlet.ServletConfig;
@@ -13,8 +12,8 @@ import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 public class ResumeServlet extends HttpServlet {
-  /*  @Resource(name = "jdbc/LocalDatabaseName")
-    private DataSource dataSource;*/
+    /*  @Resource(name = "jdbc/LocalDatabaseName")
+      private DataSource dataSource;*/
     private Storage storage;
 
     @Override
@@ -37,6 +36,32 @@ public class ResumeServlet extends HttpServlet {
                 r.getContacts().remove(type);
             }
         }
+        for (SectionType type : SectionType.values()) {
+            String value = request.getParameter(type.name());
+            switch (type) {
+                case OBJECTIVE:
+                case PERSONAL:
+                    if (value != null && value.trim().length() != 0) {
+                        r.setSection(type, new TextSection(value.trim()));
+                    } else {
+                        r.getSections().remove(type);
+                    }
+                    break;
+                case ACHIEVEMENT:
+                case QUALIFICATIONS:
+                    if (value != null && value.trim().length() != 0) {
+
+                        r.setSection(type, new ListSection(value.trim()));
+                    } else {
+                        r.getSections().remove(type);
+                    }
+                    break;
+                case EXPERIENCE:
+                case EDUCATION:
+                    break;
+            }
+        }
+
         storage.update(r);
         response.sendRedirect("resume");
     }
@@ -47,11 +72,16 @@ public class ResumeServlet extends HttpServlet {
         if (action == null) {
             request.setAttribute("resumes", storage.getAllSorted());
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
-        return;
+            return;
+        }
+        if (action.equals("clear")){
+            storage.clear();
+            response.sendRedirect("resume");
+            return;
         }
         Resume r;
-        switch (action){
-            case"delete":
+        switch (action) {
+            case "delete":
                 storage.delete(uuid);
                 response.sendRedirect("resume");
                 return;
@@ -59,12 +89,16 @@ public class ResumeServlet extends HttpServlet {
             case "edit":
                 r = storage.get(uuid);
                 break;
+            case "create":
+                r = new Resume("Новое резюме");
+                storage.save(r);
+                break;
             default:
                 throw new IllegalStateException("Action " + action + "is illegal");
         }
-        request.setAttribute("resume",r);
+        request.setAttribute("resume", r);
         request.getRequestDispatcher(
-                ("view".equals(action)? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
-        ).forward(request,response);
+                ("view".equals(action) ? "/WEB-INF/jsp/view.jsp" : "/WEB-INF/jsp/edit.jsp")
+        ).forward(request, response);
     }
 }
