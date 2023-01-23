@@ -195,14 +195,14 @@ public class Company implements Serializable {
 
             return //"\u001B[33m" +
                     startDate.format(formatter) +
-                    "-" +
-                    endDate.format(formatter) +
-                   // "\u001B[0m" +
-                    " " +
-                    title +
-                    '\n' +
-                    description +
-                    '\n';
+                            "-" +
+                            endDate.format(formatter) +
+                            // "\u001B[0m" +
+                            " " +
+                            title +
+                            '\n' +
+                            description +
+                            '\n';
         }
     }
 }

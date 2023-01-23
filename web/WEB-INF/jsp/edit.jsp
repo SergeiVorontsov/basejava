@@ -22,7 +22,7 @@
                         <div class="row mb-3">
                             <label class="col-sm-2 col-form-label">Имя</label>
                             <div class="col-sm-10">
-                                <input type="text" class="form-control" name="fullName"
+                                <input type="text" pattern="([А-Яа-яЁёA-Za-z]{1,15}\s*){1,5}"  required class="form-control" name="fullName"
                                        value="<c:out value="${resume.fullName}" />">
                             </div>
                         </div>

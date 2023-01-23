@@ -41,6 +41,13 @@ public class ResumeTestData {
                         new Company.Period("Position1", "Description1", "04.2020", "07.2020"),
                         new Company.Period("Position2.1", "Description2.1", "04.2021", "07.2021"),
                         new Company.Period("Position3.2", "Description3.2", "04.2022", "07.2022")
+                        ))
+        );
+        resume.setSection(SectionType.EDUCATION, new CompanySection(
+                new Company("Company Name1", "www.site1.com",
+                        new Company.Period("Position1", "Description1", "04.2020", "07.2020"),
+                        new Company.Period("Position2.1", "Description2.1", "04.2021", "07.2021"),
+                        new Company.Period("Position3.2", "Description3.2", "04.2022", "07.2022")
                 ))
         );
         return resume;
@@ -59,6 +66,13 @@ public class ResumeTestData {
                         new Company.Period("Position3.26", "Description3.26", "08.2022", "09.2022")
                 ))
         );
+        resume.setSection(SectionType.EDUCATION, new CompanySection(
+                new Company("Company Name1", "www.site1.com",
+                        new Company.Period("Position1", "Description1", "04.2020", "07.2020"),
+                        new Company.Period("Position2.1", "Description2.1", "04.2021", "07.2021"),
+                        new Company.Period("Position3.2", "Description3.2", "04.2022", "07.2022")
+                ))
+        );
         return resume;
     }
 
@@ -75,12 +89,19 @@ public class ResumeTestData {
                         new Company.Period("Position3.263", "Description3.263", "08.2022", "10.2022")
                 ))
         );
+        resume.setSection(SectionType.EDUCATION, new CompanySection(
+                new Company("Company Name1", "www.site1.com",
+                        new Company.Period("Position1", "Description1", "04.2020", "07.2020"),
+                        new Company.Period("Position2.1", "Description2.1", "04.2021", "07.2021"),
+                        new Company.Period("Position3.2", "Description3.2", "04.2022", "07.2022")
+                ))
+        );
         return resume;
     }
 
     public static void main(String[] args) {
         Resume kislin = createResume("123423", "Григорий Кислин");
-        // System.out.println(kislin);
+         System.out.println(kislin);
         StringBuilder stringBuilder = new StringBuilder();
         stringBuilder.append(kislin.getFullName()).append("\n");
         for (Map.Entry<ContactType, String> contact : kislin.getContacts().entrySet()
@@ -279,7 +300,7 @@ public class ResumeTestData {
             LocalDate endDate = of(1987, Month.JUNE);
             Company company = new Company(companyName, website,
                     new Company.Period(title, description, startDate, endDate));
-            addCompany(kislin, company, SectionType.EXPERIENCE);
+            addCompany(kislin, company, SectionType.EDUCATION);
         }
         {
             String companyName = "Санкт-Петербургский национальный исследовательский университет информационных технологий, механики и оптики";
@@ -296,7 +317,7 @@ public class ResumeTestData {
             Company company = new Company(companyName, website,
                     new Company.Period(title, description, startDate, endDate),
                     new Company.Period(title2, description2, startDate2, endDate2));
-            addCompany(kislin, company, SectionType.EXPERIENCE);
+            addCompany(kislin, company, SectionType.EDUCATION);
         }
         {
             String companyName = "Alcatel";
@@ -307,7 +328,7 @@ public class ResumeTestData {
             LocalDate endDate = of(1998, Month.MARCH);
             Company company = new Company(companyName, website,
                     new Company.Period(title, description, startDate, endDate));
-            addCompany(kislin, company, SectionType.EXPERIENCE);
+            addCompany(kislin, company, SectionType.EDUCATION);
         }
         {
             String companyName = "Siemens AG";
@@ -318,7 +339,7 @@ public class ResumeTestData {
             LocalDate endDate = of(2005, Month.APRIL);
             Company company = new Company(companyName, website,
                     new Company.Period(title, description, startDate, endDate));
-            addCompany(kislin, company, SectionType.EXPERIENCE);
+            addCompany(kislin, company, SectionType.EDUCATION);
         }
         {
             String companyName = "Luxoft";
@@ -329,7 +350,7 @@ public class ResumeTestData {
             LocalDate endDate = of(2011, Month.APRIL);
             Company company = new Company(companyName, website,
                     new Company.Period(title, description, startDate, endDate));
-            addCompany(kislin, company, SectionType.EXPERIENCE);
+            addCompany(kislin, company, SectionType.EDUCATION);
         }
         {
             String companyName = "Coursera";
@@ -340,8 +361,11 @@ public class ResumeTestData {
             LocalDate endDate = of(2013, Month.MAY);
             Company company = new Company(companyName, website,
                     new Company.Period(title, description, startDate, endDate));
-            addCompany(kislin, company, SectionType.EXPERIENCE);
+            addCompany(kislin, company, SectionType.EDUCATION);
         }
+        System.out.println(kislin);
+
         return kislin;
+
     }
 }

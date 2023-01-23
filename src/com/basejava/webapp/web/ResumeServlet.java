@@ -10,10 +10,11 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
-    /*  @Resource(name = "jdbc/LocalDatabaseName")
-      private DataSource dataSource;*/
     private Storage storage;
 
     @Override
@@ -49,9 +50,18 @@ public class ResumeServlet extends HttpServlet {
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
+                    String s = value.replaceAll(" +", " ");
+                    String s1 = s.replaceAll("\r", "");
+                    String s2 = s1.replaceAll("\n+", "\n");
+                    String[] strings = s2.split("\n");
+                    List<String> list = new ArrayList<String>();
+                    Arrays.stream(strings).forEach(s32 -> {
+                        String result = s32.trim();
+                        list.add(result);
+                    });
                     if (value != null && value.trim().length() != 0) {
 
-                        r.setSection(type, new ListSection(value.trim()));
+                        r.setSection(type, new ListSection(list));
                     } else {
                         r.getSections().remove(type);
                     }
@@ -74,7 +84,7 @@ public class ResumeServlet extends HttpServlet {
             request.getRequestDispatcher("/WEB-INF/jsp/list.jsp").forward(request, response);
             return;
         }
-        if (action.equals("clear")){
+        if (action.equals("clear")) {
             storage.clear();
             response.sendRedirect("resume");
             return;

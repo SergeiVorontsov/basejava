@@ -35,7 +35,7 @@ public abstract class AbstractStorageTest {
     public static final String UUID_NOT_EXIST = "dummy";
 
     static {
-        RESUME_1 = fillResume1(UUID_1, FULLNAME_1);
+        RESUME_1 = createResume(UUID_1,FULLNAME_1);
         RESUME_2 = fillResume2(UUID_2, FULLNAME_2);
         RESUME_3 = fillResume3(UUID_3, FULLNAME_3);
         RESUME_4 = fillResume4(UUID_4, FULLNAME_4);
