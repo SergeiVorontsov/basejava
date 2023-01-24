@@ -7,7 +7,6 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
-import java.time.format.DateTimeFormatter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -191,6 +190,16 @@ public class Company implements Serializable {
 
         @Override
         public String toString() {
+            return "Period{" +
+                    "title='" + title + '\'' +
+                    ", description='" + description + '\'' +
+                    ", startDate=" + startDate +
+                    ", endDate=" + endDate +
+                    '}';
+        }
+
+       /* @Override
+        public String toString() {
             DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
 
             return //"\u001B[33m" +
@@ -203,6 +212,6 @@ public class Company implements Serializable {
                             '\n' +
                             description +
                             '\n';
-        }
+        }*/
     }
 }

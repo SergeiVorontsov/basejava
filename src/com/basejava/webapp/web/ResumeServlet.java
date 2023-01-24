@@ -3,6 +3,7 @@ package com.basejava.webapp.web;
 import com.basejava.webapp.Config;
 import com.basejava.webapp.model.*;
 import com.basejava.webapp.storage.Storage;
+import com.basejava.webapp.util.HtmlUtil;
 
 import javax.servlet.ServletConfig;
 import javax.servlet.ServletException;
@@ -10,8 +11,6 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class ResumeServlet extends HttpServlet {
@@ -50,17 +49,8 @@ public class ResumeServlet extends HttpServlet {
                     break;
                 case ACHIEVEMENT:
                 case QUALIFICATIONS:
-                    String s = value.replaceAll(" +", " ");
-                    String s1 = s.replaceAll("\r", "");
-                    String s2 = s1.replaceAll("\n+", "\n");
-                    String[] strings = s2.split("\n");
-                    List<String> list = new ArrayList<String>();
-                    Arrays.stream(strings).forEach(s32 -> {
-                        String result = s32.trim();
-                        list.add(result);
-                    });
-                    if (value != null && value.trim().length() != 0) {
-
+                    List<String> list = HtmlUtil.trimToStringArray(value);
+                    if (value.trim().length() != 0) {
                         r.setSection(type, new ListSection(list));
                     } else {
                         r.getSections().remove(type);
@@ -98,9 +88,16 @@ public class ResumeServlet extends HttpServlet {
             case "view":
             case "edit":
                 r = storage.get(uuid);
+
                 break;
             case "create":
                 r = new Resume("Новое резюме");
+                r.getSections().put(SectionType.PERSONAL, new TextSection());
+                r.getSections().put(SectionType.OBJECTIVE,new TextSection());
+                r.getSections().put(SectionType.ACHIEVEMENT, new ListSection(""));
+                r.getSections().put(SectionType.QUALIFICATIONS, new ListSection(""));
+                r.getSections().put(SectionType.EXPERIENCE, new CompanySection(new Company("","",new Company.Period("","","",""))));
+                r.getSections().put(SectionType.EDUCATION,new CompanySection(new Company("","",new Company.Period("","","",""))));
                 storage.save(r);
                 break;
             default:

@@ -1,9 +1,10 @@
 package com.basejava.webapp.util;
 
 import com.basejava.webapp.model.ContactType;
-import com.basejava.webapp.model.Section;
-import com.basejava.webapp.model.SectionType;
-import com.basejava.webapp.model.TextSection;
+
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 public class HtmlUtil {
     public static String formatContactView(ContactType type, String value) {
@@ -32,24 +33,16 @@ public class HtmlUtil {
         return "<a href='" + href + "' >" + title + "</a>";
     }
 
-    public static String formatSectionView(SectionType type, Section section) {
-        switch (type) {
-            case OBJECTIVE:
-            case PERSONAL:
-                String value = ((TextSection) section).getContent();
-  /*              String s = JsonParser.read(value, Section.class);
-                return JsonParser.read(value, Section.class);
-                return JsonParser.read(value, Section.class);*/
-                break;
-            case ACHIEVEMENT:
-            case QUALIFICATIONS:
-    /*            List<String> list = new ArrayList<>(Arrays.asList(value.split("\n")));
-                resume.setSection(type, new ListSection(list));*/
-                break;
-            case EXPERIENCE:
-            case EDUCATION:
-                break;
-        }
-        return null;
+    public static List<String> trimToStringArray(String text) {
+        String s = text.replaceAll(" +", " ");
+        String s1 = s.replaceAll("\r", "");
+        String s2 = s1.replaceAll("\n+", "\n");
+        String[] strings = s2.split("\n");
+        List<String> list = new ArrayList<String>();
+        Arrays.stream(strings).forEach(s32 -> {
+            String result = s32.trim();
+            list.add(result);
+        });
+        return list;
     }
 }
