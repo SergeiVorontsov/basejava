@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" %>
+<%@ page contentType="text/html;charset=UTF-8"%>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
@@ -24,7 +24,6 @@
                         </div>
                     </div>
                 </div>
-            </div>
             <c:if test="<%=!resume.getContacts().values().isEmpty() || !resume.getSections().values().isEmpty()%>">
                 <div class="card-body">
                     <c:import url="contacts.jsp"/>
@@ -33,6 +32,7 @@
             </c:if>
         </div>
     </div>
+</div>
 </div>
 </body>
 </html>

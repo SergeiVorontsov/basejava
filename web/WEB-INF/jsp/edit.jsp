@@ -37,8 +37,24 @@
                                 <div class="row mb-3">
                                     <label class="col-sm-3 col-form-label">${type.title}</label>
                                     <div class="col-sm-6">
-                                        <input type="text" class="form-control" name="${type.name()}"
-                                               value="${resume.contacts.get(type)}">
+                                        <c:choose>
+                                            <c:when test="${type.name()=='EMAIL'}">
+                                                <input type="text" class="form-control" name="${type.name()}"
+                                                       value="${resume.contacts.get(type)}"
+                                                       pattern="^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$"
+                                                       placeholder="your@mail.com">
+                                            </c:when>
+                                            <c:when test="${type.name()=='PHONE'}">
+                                                <input type="text" class="form-control" name="${type.name()}"
+                                                       value="${resume.contacts.get(type)}"
+                                                       pattern="[+]7\s[\(]\d{3}[\)]\s\d{3}[\-]\d{2}[\-]\d{2}"
+                                                       placeholder="+7 (999) 777-77-77">
+                                            </c:when>
+                                            <c:otherwise>
+                                                <input type="text" class="form-control" name="${type.name()}"
+                                                       value="${resume.contacts.get(type)}">
+                                            </c:otherwise>
+                                        </c:choose>
                                     </div>
                                 </div>
                             </c:forEach>
