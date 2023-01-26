@@ -1,6 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.basejava.webapp.model.*" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
+<%@ page import="com.basejava.webapp.util.DateUtil" %>
 <%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="resume" scope="request" type="com.basejava.webapp.model.Resume"/>
 <c:forEach var="sectionEntry" items="${resume.sections}">
@@ -51,7 +52,15 @@
                             <div class="row align-items-start">
                                 <div class="col-3">
                                     <p>${period.startDate.format(DateTimeFormatter.ofPattern("MM/yyyy"))}
-                                        - ${period.endDate.format(DateTimeFormatter.ofPattern("MM/yyyy"))}
+                                        -
+                                        <c:choose>
+                                            <c:when test="${period.endDate eq DateUtil.NOW()}">
+                                                сейчас
+                                            </c:when>
+                                            <c:otherwise>
+                                                ${period.endDate.format(DateTimeFormatter.ofPattern("MM/yyyy"))}
+                                            </c:otherwise>
+                                        </c:choose>
                                     </p>
                                 </div>
                                 <div class="col-sm-9">

@@ -203,7 +203,8 @@ public class ResumeServlet extends HttpServlet {
             period.setStartDate(DateUtil.of(startDate));
         }
         if (endDate != null) {
-            period.setEndDate(Objects.equals(DateUtil.of(endDate), LocalDate.now()) ? DateUtil.NOW() : DateUtil.of(endDate));
+            period.setEndDate((Objects.requireNonNull(DateUtil.of(endDate)).equals(LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1))
+                    || Objects.requireNonNull(DateUtil.of(endDate)).isAfter(LocalDate.of(LocalDate.now().getYear(), LocalDate.now().getMonth(), 1)) ) ? DateUtil.NOW() : DateUtil.of(endDate));
         }
         return period;
     }
