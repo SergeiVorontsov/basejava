@@ -15,7 +15,7 @@ public class DateUtil {
     public static LocalDate of(String date) {
         if (date.length() == 7) {
             DateTimeFormatter formatter = new DateTimeFormatterBuilder()
-                    .appendPattern("MM.yyyy")
+                    .appendPattern("MM/yyyy")
                     .parseDefaulting(DAY_OF_MONTH, 1)
                     .toFormatter();
             return LocalDate.parse(date, formatter);

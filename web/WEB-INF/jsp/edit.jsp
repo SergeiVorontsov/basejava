@@ -1,8 +1,9 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.basejava.webapp.model.ContactType" %>
 <%@ page import="com.basejava.webapp.model.SectionType" %>
 <%@ page import="com.basejava.webapp.model.CompanySection" %>
+<%@ page import="java.time.format.DateTimeFormatter" %>
 <html>
 <head>
     <meta http-equiv="Content-Type" content="text/html" charset="UTF-8">
@@ -88,7 +89,7 @@
                                                                 организации</label>
                                                             <div class="col-sm-6">
                                                                 <input type="text" class="form-control"
-                                                                       name="${type}${counter.index}companyWeb"
+                                                                       name="${type}${counter.index}website"
                                                                        value="${company.website}">
                                                             </div>
                                                         </div>
@@ -104,8 +105,9 @@
                                                                         <div class="col-sm-3">
                                                                             <input type="text" class="form-control"
                                                                                    name="${type}${counter.index}startDate"
-                                                                                   value="${period.startDate}"
-                                                                                   placeholder="../....">
+                                                                                   value="${period.startDate.format(DateTimeFormatter.ofPattern("MM/yyyy"))}"
+                                                                                   pattern="(0[1-9]|1[012])[/](19|20)\d\d"
+                                                                                   placeholder="ММ/ГГГГ">
                                                                         </div>
                                                                     </div>
                                                                     <div class="row mb-3">
@@ -115,8 +117,9 @@
                                                                             <input type="text"
                                                                                    class="form-control"
                                                                                    name="${type}${counter.index}endDate"
-                                                                                   value="${period.endDate}"
-                                                                                   placeholder="../....">
+                                                                                   value="${period.endDate.format(DateTimeFormatter.ofPattern("MM/yyyy"))}"
+                                                                                   pattern="(0[1-9]|1[012])[/](19|20)\d\d"
+                                                                                   placeholder="ММ/ГГГГ">
                                                                         </div>
                                                                     </div>
                                                                     <div class="row mb-3">
@@ -125,7 +128,7 @@
                                                                         <div class="col-sm-6">
                                                                             <input type="text"
                                                                                    class="form-control"
-                                                                                   name="${type}${counter.index}position"
+                                                                                   name="${type}${counter.index}title"
                                                                                    value="${period.title}">
                                                                         </div>
                                                                     </div>

@@ -10,6 +10,17 @@ public class ResumeUtil {
         resume.getContacts().put(type, value);
     }
 
+    public static Resume EMPTY (){
+        Resume r = new Resume("Новое резюме");
+        r.getSections().put(SectionType.PERSONAL, new TextSection(""));
+        r.getSections().put(SectionType.OBJECTIVE, new TextSection(""));
+        r.getSections().put(SectionType.ACHIEVEMENT, new ListSection(""));
+        r.getSections().put(SectionType.QUALIFICATIONS, new ListSection(""));
+        r.getSections().put(SectionType.EXPERIENCE, new CompanySection(new Company("", "", new Company.Period("", "", "", ""))));
+        r.getSections().put(SectionType.EDUCATION, new CompanySection(new Company("", "", new Company.Period("", "", "", ""))));
+        return r;
+    }
+
     public static void removeContact(Resume resume, ContactType type) {
         resume.getContacts().remove(type);
     }

@@ -1,8 +1,7 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ page import="com.basejava.webapp.model.*" %>
-<%@ page import="com.basejava.webapp.util.DateUtil" %>
 <%@ page import="java.time.format.DateTimeFormatter" %>
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <jsp:useBean id="resume" scope="request" type="com.basejava.webapp.model.Resume"/>
 <c:forEach var="sectionEntry" items="${resume.sections}">
     <jsp:useBean id="sectionEntry"
@@ -51,8 +50,8 @@
                             <jsp:useBean id="period" type="com.basejava.webapp.model.Company.Period"/>
                             <div class="row align-items-start">
                                 <div class="col-3">
-                                    <p><%=period.getStartDate().format(DateTimeFormatter.ofPattern("MM/yyyy"))%>
-                                        - <%=period.getEndDate().format(DateTimeFormatter.ofPattern("MM/yyyy"))%>
+                                    <p>${period.startDate.format(DateTimeFormatter.ofPattern("MM/yyyy"))}
+                                        - ${period.endDate.format(DateTimeFormatter.ofPattern("MM/yyyy"))}
                                     </p>
                                 </div>
                                 <div class="col-sm-9">

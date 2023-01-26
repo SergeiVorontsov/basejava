@@ -1,4 +1,4 @@
-<%@ page contentType="text/html;charset=UTF-8" language="java" %>
+<%@ page contentType="text/html;charset=UTF-8" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <html>
 <head>
@@ -24,13 +24,13 @@
                         </div>
                     </div>
                 </div>
-                <c:if test="<%=!resume.getContacts().values().isEmpty() || !resume.getSections().values().isEmpty()%>">
-                    <div class="card-body">
-                        <c:import url="contacts.jsp"/>
-                        <c:import url="sections.jsp"/>
-                    </div>
-                </c:if>
             </div>
+            <c:if test="<%=!resume.getContacts().values().isEmpty() || !resume.getSections().values().isEmpty()%>">
+                <div class="card-body">
+                    <c:import url="contacts.jsp"/>
+                    <c:import url="sections.jsp"/>
+                </div>
+            </c:if>
         </div>
     </div>
 </div>

@@ -7,6 +7,7 @@ import javax.xml.bind.annotation.XmlAccessorType;
 import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
 import java.io.Serializable;
 import java.time.LocalDate;
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -30,7 +31,7 @@ public class Company implements Serializable {
         Objects.requireNonNull(periods, "periods must not be null");
         this.title = title;
         this.website = website;
-        this.periods = Arrays.asList(periods);
+        this.periods = new ArrayList<>(Arrays.asList(periods));
     }
 
     public Company(String title, String website, List<Period> periods) {
@@ -63,6 +64,10 @@ public class Company implements Serializable {
 
     public void setPeriods(List<Period> periods) {
         this.periods = periods;
+    }
+
+    public void setPeriods(Period... periods) {
+        this.periods = new ArrayList<>(Arrays.asList(periods));
     }
 
     @Override
@@ -197,21 +202,5 @@ public class Company implements Serializable {
                     ", endDate=" + endDate +
                     '}';
         }
-
-       /* @Override
-        public String toString() {
-            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("MM/yyyy");
-
-            return //"\u001B[33m" +
-                    startDate.format(formatter) +
-                            "-" +
-                            endDate.format(formatter) +
-                            // "\u001B[0m" +
-                            " " +
-                            title +
-                            '\n' +
-                            description +
-                            '\n';
-        }*/
     }
 }

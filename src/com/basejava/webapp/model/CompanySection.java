@@ -1,5 +1,6 @@
 package com.basejava.webapp.model;
 
+import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.Objects;
@@ -19,7 +20,7 @@ public class CompanySection extends Section {
 
     public CompanySection(Company... companies) {
         Objects.requireNonNull(companies, "companies must not be null");
-        this.companies = Arrays.asList(companies);
+        this.companies = new ArrayList<>(Arrays.asList(companies));
     }
 
     public List<Company> getCompanies() {
@@ -43,10 +44,8 @@ public class CompanySection extends Section {
 
     @Override
     public String toString() {
-        StringBuilder result = new StringBuilder();
-        for (Company company : companies) {
-            result.append(company);
-        }
-        return result.toString();
+        return "CompanySection{" +
+                "companies=" + companies +
+                '}';
     }
 }
